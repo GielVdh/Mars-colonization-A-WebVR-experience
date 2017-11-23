@@ -6879,15 +6879,25 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-three.js@^0.77.1:
-  version "0.77.1"
-  resolved "https://registry.yarnpkg.com/three.js/-/three.js-0.77.1.tgz#07858a8749e4b627a31083252a2d987776cca32a"
+three-vrcontrols-module@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/three-vrcontrols-module/-/three-vrcontrols-module-2.1.0.tgz#9b9fb3223938c7f0c30805bb8930a51c0af2fbd2"
   dependencies:
-    three "0.77.0"
+    three "^0.87.1"
 
-three@0.77.0:
-  version "0.77.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.77.0.tgz#8b0b1b00047689ceaa020d480a562ca60d87ff37"
+three-vreffect-module@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/three-vreffect-module/-/three-vreffect-module-2.1.0.tgz#e60513852c20ebdf5d11d63f9374e2b39e81b1e1"
+  dependencies:
+    three "^0.87.1"
+
+three@^0.87.1:
+  version "0.87.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.87.1.tgz#466a34edc4543459ced9b9d7d276b65216fe2ba8"
+
+three@^0.88.0:
+  version "0.88.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.88.0.tgz#4256c2fc38e4fb23a0d23eba2b6cce4df8e466d5"
 
 through2-filter@^2.0.0:
   version "2.0.0"

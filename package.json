@@ -35,7 +35,9 @@
     "style-loader": "^0.17.0",
     "stylelint": "^7.8.0",
     "stylelint-config-devine": "^1.1.0",
-    "three.js": "^0.77.1",
+    "three": "^0.88.0",
+    "three-vrcontrols-module": "^2.1.0",
+    "three-vreffect-module": "^2.1.0",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.0",
     "webpack-config-htmls": "^1.0.1",
@@ -43,5 +45,6 @@
     "webpack-dev-server": "^2.4.1",
     "webvr-polyfill": "^0.9.40",
     "webvr-ui": "^0.10.0"
-  }
+  },
+  "dependencies": {}
 }
