@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
+import 'webvr-polyfill/build/webvr-polyfill';
 
 const container = document.getElementById(`world`);
 

@@ -43,8 +43,9 @@
     "webpack-config-htmls": "^1.0.1",
     "webpack-config-utils": "^2.3.0",
     "webpack-dev-server": "^2.4.1",
-    "webvr-polyfill": "^0.9.40",
     "webvr-ui": "^0.10.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "webvr-polyfill": "^0.9.40"
+  }
 }
