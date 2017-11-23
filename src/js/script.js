@@ -16,7 +16,19 @@ const init = () => {
   createShape();
   createText();
 
+  createFloor();
+
   animate();
+};
+
+const createFloor = () => {
+  const geometry = new THREE.BoxGeometry(2000, 1, 2000);
+  const material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(0, - 1, 0);
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+
 };
 
 const createText = () => {
@@ -84,15 +96,16 @@ const createScene = () => {
 const createShape = () => {
 
   const loader = new THREE.BufferGeometryLoader();
-  loader.load (`../assets/3dmodels/triangle.json`, geometry => {
+  loader.load (`../assets/3dmodels/Freigther.json`, geometry => {
     const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
     geometry.castShadow = true;
     geometry.receiveShadow = true;
     mesh = new THREE.Mesh(geometry, texture);
+    //console.log(mesh.scale = (.2, .2, .2));
     mesh.position.x = 0;
-    mesh.rotation.x = 10;
+    mesh.rotation.y = 100;
     mesh.position.y = 0;
-    mesh.position.z = - 10;
+    mesh.position.z = - 20;
     scene.add(mesh);
     console.log(scene);
   });
