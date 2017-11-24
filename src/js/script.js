@@ -3,10 +3,11 @@ import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill/build/webvr-polyfill';
+import Text from './models/Text.js';
 
 const container = document.getElementById(`world`);
 
-let scene, renderer, camera, WIDTH, HEIGHT, mesh, effect, controls, enterVR, txtGeom;
+let scene, renderer, camera, WIDTH, HEIGHT, mesh, effect, controls, enterVR;
 
 const init = () => {
 
@@ -32,6 +33,11 @@ const createFloor = () => {
 };
 
 const createText = () => {
+
+  const content = `Dit is een test`;
+
+  new Text(scene, content);
+  /*
   const loader = new THREE.FontLoader();
 
   loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
@@ -54,7 +60,9 @@ const createText = () => {
     txtMesh.position.z = - 100;
 
     scene.add(txtMesh);
-  });
+  });  */
+
+
 
 };
 
