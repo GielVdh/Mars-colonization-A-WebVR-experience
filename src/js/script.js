@@ -4,6 +4,7 @@ import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill/build/webvr-polyfill';
 import Text from './models/Text.js';
+import Terrain from './models/Terrain.js';
 
 const container = document.getElementById(`world`);
 
@@ -17,11 +18,12 @@ const init = () => {
   createShape();
   createText();
 
-  createFloor();
-
+  //createFloor();
+  createTerrain();
   animate();
 };
 
+/*
 const createFloor = () => {
   const geometry = new THREE.BoxGeometry(2000, 1, 2000);
   const material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
@@ -30,6 +32,12 @@ const createFloor = () => {
   mesh.receiveShadow = true;
   scene.add(mesh);
 
+};*/
+
+
+
+const createTerrain = () => {
+  new Terrain(scene);
 };
 
 const createText = () => {
@@ -78,9 +86,11 @@ const createScene = () => {
 
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
 
+
   controls = new VRControls(camera);
   controls.standing = true;
-  camera.position.y = 400;
+  console.log(controls);
+
 
   // renderer
   renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
@@ -112,7 +122,7 @@ const createShape = () => {
     //console.log(mesh.scale = (.2, .2, .2));
     mesh.position.x = 0;
     mesh.rotation.y = 100;
-    mesh.position.y = 0;
+    mesh.position.y = 1.5;
     mesh.position.z = - 20;
     scene.add(mesh);
     console.log(scene);

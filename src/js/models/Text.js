@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 export default class Text {
 
-
   constructor(scene, content) {
 
     this.scene = scene;
