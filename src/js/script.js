@@ -13,10 +13,12 @@ let scene, renderer, camera, WIDTH, HEIGHT, mesh, effect, controls, enterVR;
 const init = () => {
 
   createScene();
+  createSkyBox();
 
   createLights();
   createShape();
-  createText();
+  createTitle();
+  createDescription();
 
   //createFloor();
   createTerrain();
@@ -40,11 +42,15 @@ const createTerrain = () => {
   new Terrain(scene);
 };
 
-const createText = () => {
+const createTitle = () => {
 
   const content = `Dit is een test`;
 
-  new Text(scene, content);
+  new Text(scene, content, [200, 0, - 100], [0, 200, 0]);
+
+
+  //description.txtMesh.position.x = 300;
+
   /*
   const loader = new THREE.FontLoader();
 
@@ -72,6 +78,14 @@ const createText = () => {
 
 
 
+};
+
+const createDescription = () => {
+
+  const content = `Een nieuw tekstblokje`;
+
+  const description = new Text(scene, content, [200, 0, - 10], [0, 300, 0]);
+  console.log(description);
 };
 
 const createScene = () => {
@@ -159,6 +173,20 @@ const createLights = () => {
     // activate lights
   scene.add(hemisphereLight);
   scene.add(shadowLight);
+};
+
+const createSkyBox = () => {
+  const vertexShader = document.getElementById(`sky-vertex`).textContent;
+  const fragmentShader = document.getElementById(`sky-fragment`).textContent;
+  const uniforms = {
+    topColor: {type: `c`, value: new THREE.Color(0xb79670)}, bottomColor: {type: `c`, value: new THREE.Color(0xc48051)},
+    offset: {type: `f`, value: 50}, exponent: {type: `f`, value: 0.6}
+  };
+  const skyMaterial = new THREE.ShaderMaterial({vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide, fog: false});
+
+    // create Mesh with sphere geometry and add to the scene
+  const skyBox = new THREE.Mesh(new THREE.SphereGeometry(250, 60, 40), skyMaterial);
+  scene.add(skyBox);
 };
 
 const animate = () => {

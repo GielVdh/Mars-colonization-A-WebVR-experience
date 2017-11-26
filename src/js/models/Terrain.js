@@ -9,7 +9,6 @@ export default class Terrain {
   }
 
   init() {
-    console.log(new TerrainLoader());
 
     const terrainLoader = new TerrainLoader();
 
