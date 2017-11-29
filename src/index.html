@@ -41,6 +41,12 @@
   <div id="world">
 
   </div>
+
+  <div id="ui" class="ui">
+    <div id="vr-button"></div>
+    <a id="magic-window" class="magic-window" href="#">Try it without a headset</a>
+  </div>
+
   <!-- skybox shaders -->
   <script type="x-shader/x-vertex" id="sky-vertex">
     varying vec3 vWorldPosition; void main() { vec4 worldPosition = modelMatrix * vec4( position, 1.0 ); vWorldPosition = worldPosition.xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }
