@@ -3,7 +3,8 @@ import TerrainLoader from '../lib/TerrainLoader';
 
 export default class Terrain {
 
-  constructor(scene) {
+  constructor(scene, userHeight) {
+    this.userHeight = userHeight;
     this.scene = scene;
     this.init();
   }
@@ -19,15 +20,16 @@ export default class Terrain {
         terrainGeom.vertices[i].z = data[i] / 65535 * 12;
       }
 
-      const material = new THREE.MeshPhongMaterial({
+      const material = new THREE.MeshLambertMaterial({
         map: new THREE.TextureLoader().load(`../assets/img/color.jpg`)
         //color: 0x000000
       });
 
       const terrain = new THREE.Mesh(terrainGeom, material);
-
+      terrain.name = `terrain`;
       terrain.receiveShadow = true;
-      terrain.position.y = - 5;
+      terrain.position.set(5, this.userHeight - 9, - 5);
+      //terrain.position.y = - 5;
       terrain.rotation.x = - 1.5;
       this.scene.add(terrain);
     });

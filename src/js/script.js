@@ -4,11 +4,30 @@ import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
 import Text from './models/Text.js';
-//import Terrain from './models/Terrain.js';
+import Terrain from './models/Terrain.js';
+//import {MeshText2D, textAlign} from 'three-text2d';
 
 const container = document.getElementById(`world`); //noHeadset = document.getElementById(`no-headset`);
 
-let scene, renderer, camera, WIDTH, HEIGHT, mesh, effect, controls, vrDisplay, vrButton, skybox, cube;
+let scene,
+  renderer,
+  camera,
+  WIDTH,
+  HEIGHT,
+  mesh,
+  effect,
+  controls,
+  vrDisplay,
+  vrButton,
+  skybox,
+  //sceneHUD,
+  hudBitmap,
+  hudMaterial,
+  //hudCanvas,
+  textGroup;
+  //cameraHUDOrt;
+
+
 
 const init = () => {
   window.addEventListener(`resize`, onResize, true);
@@ -19,14 +38,17 @@ const init = () => {
   createSkyBox();
 
   createLights();
+  createHUDLayout();
+  createHUD();
   createShape();
   createTitle();
-  createDescription();
+  //createDescription();
 
   //createFloor();
-  //createTerrain();
+  createTerrain();
   animate();
 };
+
 
 /*
 const createFloor = () => {
@@ -39,18 +61,37 @@ const createFloor = () => {
 
 };*/
 
-/*
+
+
+
 const createTerrain = () => {
-  new Terrain(scene);
-};*/
+  new Terrain(scene, controls.userHeight);
+};
 
 
 
 const createTitle = () => {
+  /*
+const text = new MeshText2D(`RIGHT`, {align: textAlign.right, font: `40px Arial`, fillStyle: `#000000`, antialias: true});
+  text.material.alphaTest = 0.1;
+  text.position.set(0, 5, - 10);
+  text.scale.set(.01, .01, .01);
+  console.log(text);
+  controls.camera.add(text);*/
 
-  const content = `Dit is een test`;
 
-  new Text(scene, content, [200, 0, - 100], [0, 200, 0]);
+
+
+  textGroup = new THREE.Object3D();
+  textGroup.position.set(0, 2, - 10);
+  textGroup.rotation.set(- 3, 2, - 10);
+  textGroup.scale.set(.2, .2, .2);
+  const content = `blub`;
+  new Text(textGroup, content, [0, 0, 0], [0, 0, 0]);
+  controls.camera.add(textGroup);
+  //scene.add(textGroup);
+
+  //text.lookAt(camera);
 
 
   //description.txtMesh.position.x = 300;
@@ -91,13 +132,16 @@ const onResize = () => {
 };
 
 
+/*
 const createDescription = () => {
 
   const content = `Een nieuw tekstblokje`;
 
   const description = new Text(scene, content, [200, 0, - 10], [0, 300, 0]);
   console.log(description);
-};
+};*/
+
+
 
 const createScene = () => {
 
@@ -108,30 +152,30 @@ const createScene = () => {
   window.addEventListener(`resize`, handleResize, true);
   window.addEventListener(`vrdisplaypresentchange`, handleResize, true);  */
 
-
   //scene
   scene = new THREE.Scene();
   console.log(scene);
 
 
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .1, 10000);
-
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .1, 1000);
 
   controls = new VRControls(camera);
   controls.standing = true;
   camera.position.y = controls.userHeight;
+  scene.add(camera);
   //camera.position.x = - 0.03200000151991844;
 
   // renderer
   renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
   renderer.setPixelRatio(window.devicePixelRatio);
+  //renderer.autoClear = false;
   container.appendChild(renderer.domElement);
 
   // Apply VR stereo rendering to renderer.
   effect = new VREffect(renderer);
   effect.setSize(WIDTH, HEIGHT);
-
-
+  console.log(WIDTH / HEIGHT);
+  console.log(effect.render(scene, camera));
   /*
 enterVR.on(`enter`, () => {
     enterVR.requestEnterFullscreen().then(() => {});
@@ -142,19 +186,30 @@ enterVR.on(`enter`, () => {
     corners: `square`
   };
   vrButton = new webvrui.EnterVRButton(renderer.domElement, uiOptions);
-  vrButton.on(`exit`, function() {
+  vrButton.on(`enter`, () => {
+    effect.cameraR.position.set(0, 0, 0);
+    renderer.clear();
+  });
+  vrButton.on(`exit`, () => {
     camera.quaternion.set(0, 0, 0, 1);
     camera.position.set(0, controls.userHeight, 0);
   });
-  vrButton.on(`hide`, function() {
+  vrButton.on(`hide`, () => {
     document.getElementById(`ui`).style.display = `none`;
   });
-  vrButton.on(`show`, function() {
+  vrButton.on(`show`, () => {
     document.getElementById(`ui`).style.display = `inherit`;
   });
   document.getElementById(`vr-button`).appendChild(vrButton.domElement);
   document.getElementById(`magic-window`).addEventListener(`click`, function() {
-    vrButton.requestEnterFullscreen();
+    vrButton.requestEnterFullscreen().catch(e => {
+      console.log(e);
+      if (e.message === `e.manager.enterFullscreen(...).then is not a function`) {
+        console.log(`webvr-ui fullscreen hotfix`);
+      } else {
+        return e;
+      }
+    });
   });
 
   /*
@@ -181,41 +236,115 @@ const handleResize = () => {
   camera.updateProjectionMatrix();
 };*/
 
-
-
 const createShape = () => {
 
-  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  /*
+const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
   cube.position.set(0, controls.userHeight, - 1);
 
   scene.add(cube);
+*/
 
-  /*
+
   const loader = new THREE.BufferGeometryLoader();
-  loader.load (`../assets/3dmodels/Freigther.json`, geometry => {
-    const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
+  loader.load (`../assets/3dmodels/MSL_dirty.json`, geometry => {
+    const texture = new THREE.MeshLambertMaterial({morphTargets: true, color: 0x68c3c0});
     geometry.castShadow = true;
     geometry.receiveShadow = true;
     mesh = new THREE.Mesh(geometry, texture);
     //console.log(mesh.scale = (.2, .2, .2));
 
   //mesh.position.x = 0;
-    //mesh.rotation.y = 100;
+    mesh.rotation.y = 100;
     //mesh.position.y = 1.5;
-    mesh.position.set(0, controls.userHeight, - 20);
+    mesh.position.set(- 3, .5, - 15);
+    mesh.rotation.x = - .25;
 
 
     scene.add(mesh);
     console.log(scene);
   });
-  */
+
+
+
 
 
 
 };
+
+const createHUDLayout = () => {
+  console.log(renderer.domElement.offsetWidth);
+  const geom = new THREE.PlaneGeometry(renderer.domElement.offsetWidth / 1000, renderer.domElement.offsetHeight / 1000);
+  const hudMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`assets/img/hud_test.png`), transparent: true});
+  console.log(geom);
+  const mesh = new THREE.Mesh(geom, hudMat);
+  mesh.position.set(0, .1, - 1);
+  mesh.scale.set(1, 1, 1);
+  console.log(controls.camera);
+  controls.camera.add(mesh);
+};
+
+
+const createHUD = () => {
+
+  const hudCanvas = document.createElement(`canvas`);
+  hudCanvas.width = WIDTH;
+  hudCanvas.height = HEIGHT;
+  hudCanvas.imageSmoothingEnabled = true;
+  hudBitmap = hudCanvas.getContext(`2d`);
+
+  hudBitmap.font = `Normal 30px Arial`;
+  hudBitmap.textAlign = `center`;
+  //hudBitmap.fillRect(0, 0, 600, 600);
+  hudBitmap.fillStyle = `rgba(245,245,245,0.75)`;
+  hudBitmap.fillText(`Initializing...`, WIDTH / 2, 50);
+
+  //scene.add(cameraHUDOrt);
+  //sceneHUD = new THREE.Scene();
+  const hudTexture = new THREE.Texture(hudCanvas);
+  //console.log(hudTexture.image.width);
+  hudTexture.needsUpdate = true;
+  //console.log(hudTexture);
+  hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture});
+  hudMaterial.transparent = true;
+  hudMaterial.alphaTest = .1;
+  const planeGeometry = new THREE.PlaneGeometry(1, 1);
+  const plane = new THREE.Mesh(planeGeometry, hudMaterial);
+  plane.position.set(0, 0, - 2);
+  plane.scale.set(2, 2, 2);
+  controls.camera.add(plane);
+  //scene.add(plane);
+
+
+
+/*
+// create a object3D to keep all the hud meshes together
+  const hudMesh = new THREE.Object3D();
+  console.log(hudMesh.layers.test);
+  console.log(hudMesh);
+  hudMesh.position.set(0, 0, - 1);
+
+
+  const circleGeom = new THREE.CircleGeometry(.3, 50);
+  const circleMat = new THREE.MeshBasicMaterial({color: 0xffff00});
+  const circle = new THREE.Mesh(circleGeom, circleMat);
+
+  circle.position.set(1, 1, - 1);
+  circle.rotation.z = .5;
+  circle.rotation.x = .1;
+  hudMesh.add(circle);
+  //scene.add(circle);
+  controls.camera.add(hudMesh);
+  //scene.add(hudMesh);
+  //console.log(controls.camera);
+
+*/
+};
+
+
 
 const createLights = () => {
     // hemisphereLight is a gradient colored light
@@ -311,23 +440,50 @@ function setStageDimensions(stage) {
 
 const animate = () => {
 
-  cube.rotation.x += 0.005;
-  cube.rotation.y += 0.01;
+  //cube.rotation.x += 0.005;
+  //cube.rotation.y += 0.01;
   if (vrButton.isPresenting()) {
     controls.update();
+    //hudControls.update();
     //renderer.render(scene, camera);
 
     effect.render(scene, camera);
+    /*
+  renderer.clear();
+    hudBitmap.clearRect(0, 0, WIDTH, HEIGHT);
+    hudBitmap.font = `Normal 40px Arial`;
+    hudBitmap.textAlign = `center`;
+    hudBitmap.fillStyle = `rgba(245,245,245,0.75)`;
+    hudBitmap.fillText(`Initializing...`, WIDTH / 2, HEIGHT / 2);
+    renderer.setViewport(0, 0, WIDTH / 2, HEIGHT);*/
+    //effect.render(sceneHUD, cameraHUDOrt);
+
+
+
+    /*
+  renderer.setViewport(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
+    renderer.render(sceneHUD, cameraHUDOrt);
+    renderer.fillStyle = 0;  */
+
+
+    //console.log(renderer);
+    //console.log(sceneHUD);
     //console.log(effect.cameraR.position.x);
 
   } else {
     renderer.render(scene, camera);
+    //renderer.render(sceneHUD, cameraHUDOrt);
   }
+  //console.log(camera.rotation);
+
+  //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
+  //console.log(textGroup.rotation.y);
+  //renderer.render(sceneHUD, cameraHUDOrt);
   //controls.update();
   //console.log(renderer.vr.getDevice());
   //effect.render(scene, camera);
   //console.log(vrDisplay);
-  window.requestAnimationFrame(animate);
+  vrDisplay.requestAnimationFrame(animate);
   //console.log(vrDisplay);
 };
 

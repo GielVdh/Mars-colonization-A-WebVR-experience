@@ -6879,6 +6879,10 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
+three-text2d@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/three-text2d/-/three-text2d-0.3.4.tgz#7dbf14c20d14ee9114dcd9bc9e90d3f1b1da25d7"
+
 three-vrcontrols-module@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/three-vrcontrols-module/-/three-vrcontrols-module-2.1.0.tgz#9b9fb3223938c7f0c30805bb8930a51c0af2fbd2"
@@ -6894,6 +6898,10 @@ three-vreffect-module@^2.1.0:
 three@^0.87.1:
   version "0.87.1"
   resolved "https://registry.yarnpkg.com/three/-/three-0.87.1.tgz#466a34edc4543459ced9b9d7d276b65216fe2ba8"
+
+three@^0.88.0:
+  version "0.88.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.88.0.tgz#4256c2fc38e4fb23a0d23eba2b6cce4df8e466d5"
 
 through2-filter@^2.0.0:
   version "2.0.0"

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 export default class Text {
 
   txtGeom
+  txtMesh
 
   constructor(scene, content, position, rotation) {
 
@@ -16,28 +17,33 @@ export default class Text {
 
   init() {
     const loader = new THREE.FontLoader();
-
+    console.log(loader);
     loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
       console.log(font);
       this.txtGeom = new THREE.TextGeometry(this.content, {
         font: font,
-        size: 10,
+        size: 5,
         height: 1,
         curveSegments: 12,
         bevelEnabled: false,
       });
 
-      const txtMaterial = new THREE.MeshPhongMaterial({color: 0x000000});
-      const txtMesh = new THREE.Mesh(this.txtGeom, txtMaterial);
-      txtMesh.position.set(...this.position);
-      txtMesh.rotation.set(...this.rotation);
+      //console.log(this.camera.position);
+      const txtMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
+      this.txtMesh = new THREE.Mesh(this.txtGeom, txtMaterial);
+      this.txtMesh.position.set(...this.position);
+      this.txtMesh.rotation.set(...this.rotation);
 
-      txtMesh.castShadow = true;
-      txtMesh.receiveShadow = true;
-
-      this.scene.add(txtMesh);
+      this.txtMesh.name = `text`;
+      this.scene.add(this.txtMesh);
 
     });
+    console.log(this.txtMesh);
+  }
+
+  lookAt(camera) {
+    console.log(camera);
+    this.txtMesh.lookAt(camera.position);
   }
 
 
