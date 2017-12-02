@@ -3,11 +3,12 @@ import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
-import Text from './models/Text.js';
+//import Text from './models/Text.js';
 import Terrain from './models/Terrain.js';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
-const container = document.getElementById(`world`); //noHeadset = document.getElementById(`no-headset`);
+const container = document.getElementById(`world`),
+  buttonArray = []; //noHeadset = document.getElementById(`no-headset`);
 
 let scene,
   renderer,
@@ -23,8 +24,12 @@ let scene,
   //sceneHUD,
   hudBitmap,
   hudMaterial,
+  hudLayoutGeom,
+  INTERSECTED,
+  cube,
+  raycaster;
   //hudCanvas,
-  textGroup;
+  //textGroup;
   //cameraHUDOrt;
 
 
@@ -36,14 +41,15 @@ const init = () => {
   createScene();
   getVRDisplays();
   createSkyBox();
-
+  addCrosshair();
   createLights();
   createHUDLayout();
   createHUD();
   createShape();
   createTitle();
   //createDescription();
-
+  nextButton();
+  previousButton();
   //createFloor();
   createTerrain();
   animate();
@@ -82,13 +88,16 @@ const text = new MeshText2D(`RIGHT`, {align: textAlign.right, font: `40px Arial`
 
 
 
-  textGroup = new THREE.Object3D();
+  /*
+textGroup = new THREE.Object3D();
   textGroup.position.set(0, 2, - 10);
   textGroup.rotation.set(- 3, 2, - 10);
   textGroup.scale.set(.2, .2, .2);
   const content = `blub`;
   new Text(textGroup, content, [0, 0, 0], [0, 0, 0]);
-  controls.camera.add(textGroup);
+  controls.camera.add(textGroup);*/
+
+
   //scene.add(textGroup);
 
   //text.lookAt(camera);
@@ -165,6 +174,9 @@ const createScene = () => {
   scene.add(camera);
   //camera.position.x = - 0.03200000151991844;
 
+  // raycaster to check which objects are intersected
+  raycaster = new THREE.Raycaster();
+
   // renderer
   renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -187,8 +199,7 @@ enterVR.on(`enter`, () => {
   };
   vrButton = new webvrui.EnterVRButton(renderer.domElement, uiOptions);
   vrButton.on(`enter`, () => {
-    effect.cameraR.position.set(0, 0, 0);
-    renderer.clear();
+
   });
   vrButton.on(`exit`, () => {
     camera.quaternion.set(0, 0, 0, 1);
@@ -236,6 +247,21 @@ const handleResize = () => {
   camera.updateProjectionMatrix();
 };*/
 
+const addCrosshair = () => {
+
+  const crosshair = new THREE.Mesh(
+    new THREE.RingGeometry(0.02, 0.04, 32),
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      opacity: 0.5,
+      transparent: true
+    })
+);
+  crosshair.position.z = - 1;
+  camera.add(crosshair);
+
+};
+
 const createShape = () => {
 
   /*
@@ -265,6 +291,7 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
 
     scene.add(mesh);
+
     console.log(scene);
   });
 
@@ -275,16 +302,49 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
 };
 
+const nextButton = () => {
+  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
+
+  cube = new THREE.Mesh(geometry, material);
+  cube.position.set(1, 1, - 1);
+  cube.rotation.set(0, 1, 0);
+
+  scene.add(cube);
+  buttonArray.push(cube);
+};
+
+const previousButton = () => {
+  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
+
+  cube = new THREE.Mesh(geometry, material);
+  cube.position.set(- 1, 1, - 1);
+  cube.rotation.set(0, - 1, 0);
+
+  scene.add(cube);
+  buttonArray.push(cube);
+};
+
 const createHUDLayout = () => {
-  console.log(renderer.domElement.offsetWidth);
-  const geom = new THREE.PlaneGeometry(renderer.domElement.offsetWidth / 1000, renderer.domElement.offsetHeight / 1000);
-  const hudMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`assets/img/hud_test.png`), transparent: true});
-  console.log(geom);
-  const mesh = new THREE.Mesh(geom, hudMat);
-  mesh.position.set(0, .1, - 1);
-  mesh.scale.set(1, 1, 1);
-  console.log(controls.camera);
-  controls.camera.add(mesh);
+  const textureLoader = new THREE.TextureLoader();
+
+  textureLoader.load(`assets/img/text_face.png`, tx => {
+    tx.antistropy = 0;
+    tx.magFilter = THREE.NearestFilter;
+    tx.minFilter = THREE.NearestFilter;
+    hudLayoutGeom = new THREE.PlaneGeometry(1, 1);
+    //console.log(geom);
+    const hudMat = new THREE.MeshBasicMaterial({map: tx,  transparent: true});
+    //console.log(geom);
+    const mesh = new THREE.Mesh(hudLayoutGeom, hudMat);
+    mesh.position.set(0, 1.2, - 1);
+    mesh.rotation.x = - .5;
+    mesh.scale.set(.8, .8, .8);
+    console.log(controls.camera);
+    scene.add(mesh);
+  });
+
 };
 
 
@@ -436,6 +496,29 @@ function setStageDimensions(stage) {
   mesh.position.set(0, controls.userHeight, 0);
 }
 
+const checkRay = () => {
+
+  // set a raycaster starting from the cam pos
+  raycaster.setFromCamera({x: 0, y: 0}, controls.camera);
+
+  // array of objects who we want to be registered when intersected
+  const intersects = raycaster.intersectObjects(buttonArray, true);
+
+  // check if the length of the array is bigger than zero && check if the object is not the INTERSECTED object
+  if (intersects.length > 0) {
+    if (INTERSECTED !== intersects[0].object) {
+      if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+      INTERSECTED = intersects[0].object;
+      INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+      INTERSECTED.material.emissive.setHex(0xff00);
+    }
+  } else {
+    if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+    INTERSECTED = undefined;
+  }
+};
+
 
 
 const animate = () => {
@@ -475,7 +558,7 @@ const animate = () => {
     //renderer.render(sceneHUD, cameraHUDOrt);
   }
   //console.log(camera.rotation);
-
+  checkRay();
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
   //renderer.render(sceneHUD, cameraHUDOrt);
@@ -483,7 +566,7 @@ const animate = () => {
   //console.log(renderer.vr.getDevice());
   //effect.render(scene, camera);
   //console.log(vrDisplay);
-  vrDisplay.requestAnimationFrame(animate);
+  window.requestAnimationFrame(animate);
   //console.log(vrDisplay);
 };
 

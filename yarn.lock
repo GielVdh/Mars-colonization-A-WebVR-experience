@@ -6879,10 +6879,6 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-three-text2d@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/three-text2d/-/three-text2d-0.3.4.tgz#7dbf14c20d14ee9114dcd9bc9e90d3f1b1da25d7"
-
 three-vrcontrols-module@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/three-vrcontrols-module/-/three-vrcontrols-module-2.1.0.tgz#9b9fb3223938c7f0c30805bb8930a51c0af2fbd2"
