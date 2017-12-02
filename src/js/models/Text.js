@@ -5,20 +5,54 @@ export default class Text {
   txtGeom
   txtMesh
 
-  constructor(scene, content, position, rotation) {
+  constructor(scene, content, position) {
 
     this.position = position;
-    this.rotation = rotation;
+    //this.rotation = rotation;
     this.scene = scene;
     this.content = content;
 
     this.init();
   }
 
+// TO DO: adjust for geometry text
   init() {
     const loader = new THREE.FontLoader();
     console.log(loader);
     loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
+
+      const color = 0x000000;
+
+      const txtShape = new THREE.BufferGeometry();
+
+      const mat = new THREE.MeshBasicMaterial({
+        color: color,
+        side: THREE.DoubleSide
+      });
+
+      const shapes = font.generateShapes(this.content, .08, 2);
+
+      const geom = new THREE.ShapeGeometry(shapes);
+
+      geom.computeBoundingBox();
+
+      const xMid = - .5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
+
+      geom.translate(xMid, 0, 0);
+
+      txtShape.fromGeometry(geom);
+
+      const txt = new THREE.Mesh(txtShape, mat);
+      txt.position.set(...this.position);
+      /*
+txt.position.x = .08;
+      txt.position.y = .07;
+      txt.position.z = .3;*/
+
+
+      this.scene.add(txt);
+
+      /*
       console.log(font);
       this.txtGeom = new THREE.TextGeometry(this.content, {
         font: font,
@@ -36,6 +70,8 @@ export default class Text {
 
       this.txtMesh.name = `text`;
       this.scene.add(this.txtMesh);
+      */
+
 
     });
     console.log(this.txtMesh);

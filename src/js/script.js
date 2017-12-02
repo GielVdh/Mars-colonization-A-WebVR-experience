@@ -3,7 +3,7 @@ import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
-//import Text from './models/Text.js';
+import Text from './models/Text.js';
 import Terrain from './models/Terrain.js';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
@@ -303,26 +303,42 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 };
 
 const nextButton = () => {
-  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  const nextButton = new THREE.Object3D();
+  nextButton.position.set(1, 1, - 1);
+  nextButton.rotation.set(0, - .5, 0);
+
+  const geometry = new THREE.BoxGeometry(.8, .2, .1);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
-  cube.position.set(1, 1, - 1);
-  cube.rotation.set(0, 1, 0);
 
-  scene.add(cube);
+  nextButton.add(cube);
+
+  const content = `NEXT`;
+
+  new Text(nextButton, content, [- .08, .07, .3 ]);
+
+  scene.add(nextButton);
   buttonArray.push(cube);
 };
 
 const previousButton = () => {
-  const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  const previousButton = new THREE.Object3D();
+  previousButton.position.set(- 1, 1, - 1);
+  previousButton.rotation.set(0, .5, 0);
+
+  const geometry = new THREE.BoxGeometry(.8, .2, .1);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
-  cube.position.set(- 1, 1, - 1);
-  cube.rotation.set(0, - 1, 0);
 
-  scene.add(cube);
+  previousButton.add(cube);
+
+  const content = `PREVIOUS`;
+
+  new Text(previousButton, content, [.08, .07, .3]);
+
+  scene.add(previousButton);
   buttonArray.push(cube);
 };
 
