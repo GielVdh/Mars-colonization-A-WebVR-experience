@@ -8,7 +8,8 @@ import Terrain from './models/Terrain.js';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
 const container = document.getElementById(`world`),
-  buttonArray = []; //noHeadset = document.getElementById(`no-headset`);
+  buttonArray = [],
+  descriptionArray = []; //noHeadset = document.getElementById(`no-headset`);
 
 let scene,
   renderer,
@@ -27,7 +28,8 @@ let scene,
   hudLayoutGeom,
   INTERSECTED,
   cube,
-  raycaster;
+  raycaster,
+  count = 0, descriptions;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -50,6 +52,7 @@ const init = () => {
   //createDescription();
   nextButton();
   previousButton();
+
   //createFloor();
   createTerrain();
   animate();
@@ -311,7 +314,7 @@ const nextButton = () => {
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
-
+  cube.name = `next`;
   nextButton.add(cube);
 
   const content = `NEXT`;
@@ -331,7 +334,7 @@ const previousButton = () => {
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
-
+  cube.name = `previous`;
   previousButton.add(cube);
 
   const content = `PREVIOUS`;
@@ -342,25 +345,52 @@ const previousButton = () => {
   buttonArray.push(cube);
 };
 
+const scrollDescriptions = () => {
+  if (INTERSECTED !== undefined) {
+    if (INTERSECTED.name === `next` && count !== 2) {
+      count ++;
+      checkIfDescVisible();
+    } else if (INTERSECTED.name === `previous` && count !== 0) {
+      count --;
+      checkIfDescVisible();
+    }
+  }
+
+
+};
+
 const createHUDLayout = () => {
   const textureLoader = new THREE.TextureLoader();
-
-  textureLoader.load(`assets/img/text_face.png`, tx => {
-    tx.antistropy = 0;
-    tx.magFilter = THREE.NearestFilter;
-    tx.minFilter = THREE.NearestFilter;
+  descriptions = new THREE.Object3D();
+  for (let i = 0;i < 3;i ++) {
     hudLayoutGeom = new THREE.PlaneGeometry(1, 1);
-    //console.log(geom);
-    const hudMat = new THREE.MeshBasicMaterial({map: tx,  transparent: true});
-    //console.log(geom);
+    const hudMat = new THREE.MeshBasicMaterial({map: textureLoader.load(`assets/img/text_faces/text_face_${i}.png`, tx => {
+
+      tx.antistropy = 0;
+      tx.magFilter = THREE.NearestFilter;
+      tx.minFilter = THREE.NearestFilter;
+
+    }), transparent: true});
+
     const mesh = new THREE.Mesh(hudLayoutGeom, hudMat);
     mesh.position.set(0, 1.2, - 1);
     mesh.rotation.x = - .5;
     mesh.scale.set(.8, .8, .8);
-    console.log(controls.camera);
-    scene.add(mesh);
-  });
+    descriptionArray.push(mesh);
+    descriptions.add(mesh);
+  }
+  checkIfDescVisible();
+  scene.add(descriptions);
+};
 
+const checkIfDescVisible = () => {
+  descriptionArray.forEach((e, id) => {
+    if (id !== count) {
+      e.visible = false;
+    } else {
+      e.visible = true;
+    }
+  });
 };
 
 
@@ -528,6 +558,7 @@ const checkRay = () => {
       INTERSECTED = intersects[0].object;
       INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
       INTERSECTED.material.emissive.setHex(0xff00);
+      scrollDescriptions();
     }
   } else {
     if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
@@ -575,6 +606,7 @@ const animate = () => {
   }
   //console.log(camera.rotation);
   checkRay();
+
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
   //renderer.render(sceneHUD, cameraHUDOrt);
