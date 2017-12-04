@@ -274,22 +274,26 @@ const createModels = () => {
   const modelsContainer = new THREE.Object3D();
   modelsContainer.rotation.y = 100;
   //container.position.y = 1.5;
-  modelsContainer.position.set(- 3, .5, - 15);
-  modelsContainer.rotation.x = - .25;
+  modelsContainer.position.set(- 3, - 1, - 10);
 
   // add rover to te modelsContainer and push it to the models array
   const rover = createRoverModel();
+  rover.scale.set(1.3, 1.3, 1.3);
   modelsContainer.add(rover);
   modelsArray.push(rover);
 
   // add buildings to te modelsContainer and push it to the models array
   const buildings = createBuildingsModel();
-  buildings.scale.set(.1, .1, .1);
+  buildings.position.set(5, 1, - 20);
+  buildings.rotation.set(0, 5, 0);
+  buildings.scale.set(.7, .7, .7);
   modelsContainer.add(buildings);
   modelsArray.push(buildings);
 
   // add building1 to te modelsContainer and push it to the models array
   const building1 = createBuilding1Model();
+  building1.position.set(- 10, 1, 0);
+  building1.scale.set(4, 4, 4);
   modelsContainer.add(building1);
   modelsArray.push(building1);
 
@@ -339,7 +343,7 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 const createRoverModel = () => {
   const container = new THREE.Object3D();
 
-  const src = `../assets/3dmodels/model.json`;
+  const src = `../assets/3dmodels/MSL_dirty.json`;
   new Model(container, src);
 
   return container;
@@ -369,18 +373,19 @@ const createBuilding1Model = () => {
 const nextButton = () => {
   const nextButton = new THREE.Object3D();
   nextButton.position.set(1, 1, - 1);
-  nextButton.rotation.set(0, - .5, 0);
+  nextButton.rotation.set(- .2, - .3, 0);
 
-  const geometry = new THREE.BoxGeometry(.8, .2, .1);
+  const geometry = new THREE.BoxGeometry(.6, .2, .1);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
+  cube.position.x = - .06;
   cube.name = `next`;
   nextButton.add(cube);
 
   const content = `NEXT`;
 
-  new Text(nextButton, content, [- .08, .07, .3 ]);
+  new Text(nextButton, content, [- .08, - .03, .1]);
 
   scene.add(nextButton);
   buttonArray.push(cube);
@@ -389,18 +394,19 @@ const nextButton = () => {
 const previousButton = () => {
   const previousButton = new THREE.Object3D();
   previousButton.position.set(- 1, 1, - 1);
-  previousButton.rotation.set(0, .5, 0);
+  previousButton.rotation.set(- .2, .3, 0);
 
-  const geometry = new THREE.BoxGeometry(.8, .2, .1);
+  const geometry = new THREE.BoxGeometry(.6, .2, .1);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
+  cube.position.x = .06;
   cube.name = `previous`;
   previousButton.add(cube);
 
   const content = `PREVIOUS`;
 
-  new Text(previousButton, content, [.08, .07, .3]);
+  new Text(previousButton, content, [.08, - .03, .1]);
 
   scene.add(previousButton);
   buttonArray.push(cube);
@@ -459,10 +465,12 @@ const checkIfDescVisible = () => {
 
 const checkIfModelVisible = () => {
   modelsArray.forEach((e, id) => {
-    if (id !== count) {
-      e.visible = false;
-    } else {
+    if (id === count) {
       e.visible = true;
+    } else if (id < count) {
+      e.visible = true;
+    } else {
+      e.visible = false;
     }
   });
 };

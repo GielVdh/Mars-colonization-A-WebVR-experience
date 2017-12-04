@@ -13,12 +13,11 @@ export default class Model {
 
   init() {
     this.loader = new THREE.JSONLoader();
-    this.loader.load (this.src, geometry => {
+    this.loader.load (this.src, (geometry, materials) => {
 
-      const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
-      geometry.castShadow = true;
-      geometry.receiveShadow = true;
-      this.mesh = new THREE.Mesh(geometry, texture);
+      //const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
+
+      this.mesh = new THREE.Mesh(geometry, materials);
       //console.log(mesh.scale = (.2, .2, .2));
 
     //mesh.position.x = 0;
