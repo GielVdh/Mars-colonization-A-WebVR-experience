@@ -3,13 +3,16 @@ import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
+
 import Text from './models/Text.js';
-import Terrain from './models/Terrain.js';
+import Terrain from './models/Terrain';
+import Model from './models/Model';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
 const container = document.getElementById(`world`),
   buttonArray = [],
-  descriptionArray = []; //noHeadset = document.getElementById(`no-headset`);
+  descriptionArray = [],
+  modelsArray = []; //noHeadset = document.getElementById(`no-headset`);
 
 let scene,
   renderer,
@@ -47,8 +50,9 @@ const init = () => {
   createLights();
   createHUDLayout();
   createHUD();
-  createShape();
+  //createShape();
   createTitle();
+  createModels();
   //createDescription();
   nextButton();
   previousButton();
@@ -265,6 +269,37 @@ const addCrosshair = () => {
 
 };
 
+
+const createModels = () => {
+  const modelsContainer = new THREE.Object3D();
+  modelsContainer.rotation.y = 100;
+  //container.position.y = 1.5;
+  modelsContainer.position.set(- 3, .5, - 15);
+  modelsContainer.rotation.x = - .25;
+
+  // add rover to te modelsContainer and push it to the models array
+  const rover = createRoverModel();
+  modelsContainer.add(rover);
+  modelsArray.push(rover);
+
+  // add buildings to te modelsContainer and push it to the models array
+  const buildings = createBuildingsModel();
+  buildings.scale.set(.1, .1, .1);
+  modelsContainer.add(buildings);
+  modelsArray.push(buildings);
+
+  // add building1 to te modelsContainer and push it to the models array
+  const building1 = createBuilding1Model();
+  modelsContainer.add(building1);
+  modelsArray.push(building1);
+
+  checkIfModelVisible();
+  scene.add(modelsContainer);
+
+};
+
+
+/*
 const createShape = () => {
 
   /*
@@ -275,12 +310,14 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
   cube.position.set(0, controls.userHeight, - 1);
 
   scene.add(cube);
-*/
 
 
-  const loader = new THREE.BufferGeometryLoader();
-  loader.load (`../assets/3dmodels/MSL_dirty.json`, geometry => {
-    const texture = new THREE.MeshLambertMaterial({morphTargets: true, color: 0x68c3c0});
+
+
+  const loader = new THREE.JSONLoader();
+  loader.load (`../assets/3dmodels/model.json`, (geometry, mat) => {
+    console.log(mat);
+    const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
     geometry.castShadow = true;
     geometry.receiveShadow = true;
     mesh = new THREE.Mesh(geometry, texture);
@@ -294,14 +331,38 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
 
     scene.add(mesh);
-
-    console.log(scene);
   });
+};*/
 
 
 
+const createRoverModel = () => {
+  const container = new THREE.Object3D();
 
+  const src = `../assets/3dmodels/model.json`;
+  new Model(container, src);
 
+  return container;
+
+};
+
+const createBuildingsModel = () => {
+  const container = new THREE.Object3D();
+
+  const src = `../assets/3dmodels/buildings.json`;
+  new Model(container, src);
+
+  return container;
+
+};
+
+const createBuilding1Model = () => {
+  const container = new THREE.Object3D();
+
+  const src = `../assets/3dmodels/building1.json`;
+  new Model(container, src);
+
+  return container;
 
 };
 
@@ -350,9 +411,11 @@ const scrollDescriptions = () => {
     if (INTERSECTED.name === `next` && count !== 2) {
       count ++;
       checkIfDescVisible();
+      checkIfModelVisible();
     } else if (INTERSECTED.name === `previous` && count !== 0) {
       count --;
       checkIfDescVisible();
+      checkIfModelVisible();
     }
   }
 
@@ -380,6 +443,7 @@ const createHUDLayout = () => {
     descriptions.add(mesh);
   }
   checkIfDescVisible();
+  console.log(descriptions);
   scene.add(descriptions);
 };
 
@@ -393,6 +457,17 @@ const checkIfDescVisible = () => {
   });
 };
 
+const checkIfModelVisible = () => {
+  modelsArray.forEach((e, id) => {
+    if (id !== count) {
+      e.visible = false;
+    } else {
+      e.visible = true;
+    }
+  });
+};
+
+// This function will probably be removed
 
 const createHUD = () => {
 
