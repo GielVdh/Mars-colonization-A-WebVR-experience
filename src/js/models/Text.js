@@ -19,7 +19,7 @@ export default class Text {
   init() {
     const loader = new THREE.FontLoader();
     console.log(loader);
-    loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
+    loader.load(`../assets/fonts/neuropol_regular.json`, font => {
 
       const color = 0x000000;
 
