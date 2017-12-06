@@ -28,8 +28,8 @@ export default class Terrain {
       const terrain = new THREE.Mesh(terrainGeom, material);
       terrain.name = `terrain`;
       terrain.receiveShadow = true;
-      terrain.position.set(5, this.userHeight - 9, - 5);
-      //terrain.position.y = - 5;
+      terrain.position.set(5, - 4, - 10);
+      terrain.rotation.z = 3;
       terrain.rotation.x = - 1.5;
       this.scene.add(terrain);
     });

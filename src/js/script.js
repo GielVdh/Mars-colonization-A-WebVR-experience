@@ -195,6 +195,8 @@ const createScene = () => {
   effect.setSize(WIDTH, HEIGHT);
   console.log(WIDTH / HEIGHT);
   console.log(effect.render(scene, camera));
+  console.log(effect);
+  console.log(controls.camera);
   /*
 enterVR.on(`enter`, () => {
     enterVR.requestEnterFullscreen().then(() => {});
@@ -588,7 +590,7 @@ const getVRDisplays = () => {
       //console.log(display.requestAnimationFrame);
       vrDisplay = display;
       display.requestAnimationFrame(animate);
-      console.log(vrDisplay);
+      display.bufferScale_ = 1;
       console.log(effect);
     })
     .catch(() => {
