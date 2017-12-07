@@ -12,7 +12,8 @@ import Model from './models/Model';
 const container = document.getElementById(`world`),
   buttonArray = [],
   descriptionArray = [],
-  modelsArray = []; //noHeadset = document.getElementById(`no-headset`);
+  modelsArray = [],
+  mouse = new THREE.Vector2(); //noHeadset = document.getElementById(`no-headset`);
 
 let scene,
   renderer,
@@ -26,13 +27,14 @@ let scene,
   vrButton,
   skybox,
   //sceneHUD,
-  hudBitmap,
-  hudMaterial,
+  //hudBitmap,
+  //hudMaterial,
   hudLayoutGeom,
   INTERSECTED,
   cube,
   raycaster,
-  count = 0, descriptions;
+  count = 0,
+  descriptions;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -46,10 +48,10 @@ const init = () => {
   createScene();
   getVRDisplays();
   createSkyBox();
-  addCrosshair();
+
   createLights();
   createHUDLayout();
-  createHUD();
+  //createHUD();
   //createShape();
   createTitle();
   createModels();
@@ -187,16 +189,24 @@ const createScene = () => {
   // renderer
   renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
   renderer.setPixelRatio(window.devicePixelRatio);
+  // TO DO EventListener for touch event
+  window.addEventListener(`touchstart`, handleCardboardTouch);
+  /*
+  window.addEventListener(`mousedown`, handleCardboardTouch);
+  window.addEventListener(`mousemove`, handleMouseMove);  */
+
+
+
   //renderer.autoClear = false;
   container.appendChild(renderer.domElement);
 
   // Apply VR stereo rendering to renderer.
   effect = new VREffect(renderer);
   effect.setSize(WIDTH, HEIGHT);
-  console.log(WIDTH / HEIGHT);
-  console.log(effect.render(scene, camera));
-  console.log(effect);
-  console.log(controls.camera);
+  //console.log(WIDTH / HEIGHT);
+  //console.log(effect.render(scene, camera));
+  //console.log(effect);
+  //console.log(controls.camera);
   /*
 enterVR.on(`enter`, () => {
     enterVR.requestEnterFullscreen().then(() => {});
@@ -213,6 +223,8 @@ enterVR.on(`enter`, () => {
   vrButton.on(`exit`, () => {
     camera.quaternion.set(0, 0, 0, 1);
     camera.position.set(0, controls.userHeight, 0);
+    window.removeEventListener(`mousedown`, handleCardboardTouch);
+    window.removeEventListener(`mousemove`, handleMouseMove);
   });
   vrButton.on(`hide`, () => {
     document.getElementById(`ui`).style.display = `none`;
@@ -221,7 +233,11 @@ enterVR.on(`enter`, () => {
     document.getElementById(`ui`).style.display = `inherit`;
   });
   document.getElementById(`vr-button`).appendChild(vrButton.domElement);
-  document.getElementById(`magic-window`).addEventListener(`click`, function() {
+  document.getElementById(`magic-window`).addEventListener(`click`, () => {
+    if (vrDisplay === window) {
+      window.addEventListener(`mousedown`, handleCardboardTouch);
+      window.addEventListener(`mousemove`, handleMouseMove);
+    }
     vrButton.requestEnterFullscreen().catch(e => {
       console.log(e);
       if (e.message === `e.manager.enterFullscreen(...).then is not a function`) {
@@ -247,6 +263,19 @@ enterVR.on(`enter`, () => {
   });  */
 
 
+};
+
+const handleCardboardTouch = () => {
+  if (INTERSECTED !== undefined) {
+    scrollDescriptions();
+  }
+};
+
+const handleMouseMove = e => {
+  e.preventDefault();
+
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
 };
 
 /*
@@ -473,17 +502,17 @@ const previousButton = () => {
 };
 
 const scrollDescriptions = () => {
-  if (INTERSECTED !== undefined) {
-    if (INTERSECTED.name === `next` && count !== 5) {
-      count ++;
-      checkIfDescVisible();
-      checkIfModelVisible();
-    } else if (INTERSECTED.name === `previous` && count !== 0) {
-      count --;
-      checkIfDescVisible();
-      checkIfModelVisible();
-    }
+
+  if (INTERSECTED.name === `next` && count !== 2) {
+    count ++;
+    checkIfDescVisible();
+    checkIfModelVisible();
+  } else if (INTERSECTED.name === `previous` && count !== 0) {
+    count --;
+    checkIfDescVisible();
+    checkIfModelVisible();
   }
+
 
 
 };
@@ -537,7 +566,7 @@ const checkIfModelVisible = () => {
 
 // This function will probably be removed
 
-const createHUD = () => {
+/*const createHUD = () => {
 
   const hudCanvas = document.createElement(`canvas`);
   hudCanvas.width = WIDTH;
@@ -590,8 +619,8 @@ const createHUD = () => {
   //scene.add(hudMesh);
   //console.log(controls.camera);
 
-*/
-};
+
+};*/
 
 
 
@@ -649,7 +678,8 @@ const getVRDisplays = () => {
       vrDisplay = display;
       display.requestAnimationFrame(animate);
       display.bufferScale_ = 1;
-      console.log(effect);
+      addCrosshair();
+
     })
     .catch(() => {
       // If there is no display available, fallback to window
@@ -688,7 +718,7 @@ function setStageDimensions(stage) {
 const checkRay = () => {
 
   // set a raycaster starting from the cam pos
-  raycaster.setFromCamera({x: 0, y: 0}, controls.camera);
+  raycaster.setFromCamera(mouse, controls.camera);
 
   // array of objects who we want to be registered when intersected
   const intersects = raycaster.intersectObjects(buttonArray, true);
@@ -701,7 +731,7 @@ const checkRay = () => {
       INTERSECTED = intersects[0].object;
       INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
       INTERSECTED.material.emissive.setHex(0xff00);
-      scrollDescriptions();
+
     }
   } else {
     if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
