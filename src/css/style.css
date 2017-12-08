@@ -31,7 +31,7 @@ body {
 .magic-window {
   display: block;
   color: white;
-  margin-top: 1em;
+  margin-top: 1rem;
 }
 
 .compassSVG {
@@ -44,4 +44,20 @@ header {
 
 h1 {
   font-size: 3rem;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.loading {
+  color: white;
+  text-transform: uppercase;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 3rem;
+  position: absolute;
+  bottom: 4em;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

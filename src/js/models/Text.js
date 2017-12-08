@@ -2,22 +2,25 @@ import * as THREE from 'three';
 
 export default class Text {
 
-  txtGeom
-  txtMesh
+  position
+  scene
+  content
+  loadingManager
 
-  constructor(scene, content, position) {
+  constructor(scene, content, position, loadingManager) {
 
     this.position = position;
     //this.rotation = rotation;
     this.scene = scene;
     this.content = content;
+    this.loadingManager = loadingManager;
 
     this.init();
   }
 
 // TO DO: adjust for geometry text
   init() {
-    const loader = new THREE.FontLoader();
+    const loader = new THREE.FontLoader(this.loadingManager);
     console.log(loader);
     loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
 
@@ -74,7 +77,6 @@ txt.position.x = .08;
 
 
     });
-    console.log(this.txtMesh);
   }
 
   lookAt(camera) {

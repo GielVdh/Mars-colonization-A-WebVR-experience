@@ -4,15 +4,17 @@ export default class Model {
 
   container
   src
+  loadingManager
 
-  constructor(container, src) {
+  constructor(container, src, loadingManager) {
     this.container = container;
     this.src = src;
+    this.loadingManager = loadingManager;
     this.init();
   }
 
   init() {
-    this.loader = new THREE.JSONLoader();
+    this.loader = new THREE.JSONLoader(this.loadingManager);
     this.loader.load (this.src, (geometry, materials) => {
 
       //const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
@@ -33,7 +35,20 @@ this.mesh.rotation.y = 100;
       this.container.add(this.mesh);
 
       //console.log(scene);
-    });
+    }, this.onProgress);
   }
+
+  onProgress(xhr) {
+    console.log(this.src);
+    if (xhr.lengthComputable) {
+      const percentComplete = xhr.loaded / xhr.total * 100;
+      console.log(`${Math.round(percentComplete, 2)  }% downloaded`);
+    }
+  }
+
+  onError() {
+
+  }
+
 
 }

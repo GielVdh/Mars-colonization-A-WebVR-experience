@@ -48,6 +48,10 @@
     <a id="magic-window" class="magic-window" href="#">Try it without a headset</a>
   </div>
 
+  <span class="loading">
+
+  </span>
+
   <!-- skybox shaders -->
   <script type="x-shader/x-vertex" id="sky-vertex">
     varying vec3 vWorldPosition; void main() { vec4 worldPosition = modelMatrix * vec4( position, 1.0 ); vWorldPosition = worldPosition.xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }
