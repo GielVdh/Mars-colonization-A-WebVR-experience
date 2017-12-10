@@ -19,9 +19,9 @@ export default class Text {
   init() {
     const loader = new THREE.FontLoader();
     console.log(loader);
-    loader.load(`../assets/fonts/neuropol_regular.json`, font => {
+    loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
 
-      const color = 0x000000;
+      const color = 0xffffff;
 
       const txtShape = new THREE.BufferGeometry();
 
@@ -30,7 +30,7 @@ export default class Text {
         side: THREE.DoubleSide
       });
 
-      const shapes = font.generateShapes(this.content, .08, 2);
+      const shapes = font.generateShapes(this.content, .03, 2);
 
       const geom = new THREE.ShapeGeometry(shapes);
 

@@ -280,24 +280,51 @@ const createModels = () => {
 
   // add rover to te modelsContainer and push it to the models array
   const rover = createRoverModel();
-  rover.scale.set(1.3, 1.3, 1.3);
+  rover.position.set(- 10, - .5, - 10);
+  rover.rotation.set(- .3, 6, 0);
+  rover.scale.set(1, 1, 1);
   modelsContainer.add(rover);
   modelsArray.push(rover);
 
   // add buildings to te modelsContainer and push it to the models array
-  const buildings = createBuildingsModel();
-  buildings.position.set(5, 1, - 20);
-  buildings.rotation.set(0, 5, 0);
-  buildings.scale.set(.7, .7, .7);
-  modelsContainer.add(buildings);
-  modelsArray.push(buildings);
+  const erv = createERVModel();
+  erv.position.set(- 15, 0, - 5);
+  erv.rotation.set(0, 5, 0);
+  erv.scale.set(.7, .7, .7);
+  modelsContainer.add(erv);
+  modelsArray.push(erv);
 
-  // add building1 to te modelsContainer and push it to the models array
-  const building1 = createBuilding1Model();
-  building1.position.set(- 10, 1, 0);
-  building1.scale.set(4, 4, 4);
-  modelsContainer.add(building1);
-  modelsArray.push(building1);
+  // add buildings to te modelsContainer and push it to the models array
+  const habitat = createHabitatModel();
+  habitat.position.set(- 20, - .5, - 1);
+  habitat.rotation.set(.04, 0, 0);
+  habitat.scale.set(.7, .7, .7);
+  modelsContainer.add(habitat);
+  modelsArray.push(habitat);
+
+  // add buildings to te modelsContainer and push it to the models array
+  const city = createCityModel();
+  city.position.set(- 10, .7, - 25);
+  city.rotation.set(0, - .2, 0);
+  city.scale.set(.3, .3, .3);
+  modelsContainer.add(city);
+  modelsArray.push(city);
+
+  // add buildings to te modelsContainer and push it to the models array
+  const chimneys = createChimneysModel();
+  chimneys.position.set(10, 6, - 16);
+  chimneys.rotation.set(.2, - .2, 0);
+  chimneys.scale.set(.9, .9, .9);
+  modelsContainer.add(chimneys);
+  modelsArray.push(chimneys);
+
+  // add rover to te modelsContainer and push it to the models array
+  const terraforming = createTerraformingModel();
+  terraforming.position.set(5, 4, - 5);
+  terraforming.scale.set(2, 2, 2);
+  modelsContainer.add(terraforming);
+  modelsArray.push(terraforming);
+
 
   checkIfModelVisible();
   scene.add(modelsContainer);
@@ -345,39 +372,70 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 const createRoverModel = () => {
   const container = new THREE.Object3D();
 
-  const src = `../assets/3dmodels/MSL_dirty.json`;
+  const src = `../assets/3dmodels/1/MSL_dirty.json`;
   new Model(container, src);
 
   return container;
 
 };
 
-const createBuildingsModel = () => {
+const createERVModel = () => {
   const container = new THREE.Object3D();
 
-  const src = `../assets/3dmodels/buildings.json`;
+  const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
   new Model(container, src);
 
   return container;
 
 };
 
-const createBuilding1Model = () => {
+const createHabitatModel = () => {
   const container = new THREE.Object3D();
 
-  const src = `../assets/3dmodels/building1.json`;
+  const src = `../assets/3dmodels/3/hab.json`;
   new Model(container, src);
 
   return container;
 
 };
+
+const createCityModel = () => {
+  const container = new THREE.Object3D();
+
+  const src = `../assets/3dmodels/4/habitats.json`;
+  new Model(container, src);
+
+  return container;
+
+};
+
+const createChimneysModel = () => {
+  const container = new THREE.Object3D();
+
+  const src = `../assets/3dmodels/5/chimney2.json`;
+  new Model(container, src);
+
+  return container;
+
+};
+
+const createTerraformingModel = () => {
+  const container = new THREE.Object3D();
+
+  const src = `../assets/3dmodels/6/birch_tree.json`;
+  new Model(container, src);
+
+  return container;
+
+};
+
 
 const nextButton = () => {
   const nextButton = new THREE.Object3D();
-  nextButton.position.set(1, 1, - 1);
+  nextButton.position.set(1.05, 1, - 1);
   nextButton.rotation.set(- .2, - .3, 0);
 
-  const geometry = new THREE.BoxGeometry(.6, .2, .1);
+  const geometry = new THREE.BoxGeometry(.3, .1, .05);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
@@ -387,7 +445,7 @@ const nextButton = () => {
 
   const content = `NEXT`;
 
-  new Text(nextButton, content, [- .08, - .03, .1]);
+  new Text(nextButton, content, [- .08, 0, .1]);
 
   scene.add(nextButton);
   buttonArray.push(cube);
@@ -395,10 +453,10 @@ const nextButton = () => {
 
 const previousButton = () => {
   const previousButton = new THREE.Object3D();
-  previousButton.position.set(- 1, 1, - 1);
+  previousButton.position.set(- 1.05, 1, - 1);
   previousButton.rotation.set(- .2, .3, 0);
 
-  const geometry = new THREE.BoxGeometry(.6, .2, .1);
+  const geometry = new THREE.BoxGeometry(.3, .1, .05);
   const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
   cube = new THREE.Mesh(geometry, material);
@@ -408,7 +466,7 @@ const previousButton = () => {
 
   const content = `PREVIOUS`;
 
-  new Text(previousButton, content, [.08, - .03, .1]);
+  new Text(previousButton, content, [.08, 0, .1]);
 
   scene.add(previousButton);
   buttonArray.push(cube);
@@ -416,7 +474,7 @@ const previousButton = () => {
 
 const scrollDescriptions = () => {
   if (INTERSECTED !== undefined) {
-    if (INTERSECTED.name === `next` && count !== 2) {
+    if (INTERSECTED.name === `next` && count !== 5) {
       count ++;
       checkIfDescVisible();
       checkIfModelVisible();
@@ -433,7 +491,7 @@ const scrollDescriptions = () => {
 const createHUDLayout = () => {
   const textureLoader = new THREE.TextureLoader();
   descriptions = new THREE.Object3D();
-  for (let i = 0;i < 3;i ++) {
+  for (let i = 0;i < 6;i ++) {
     hudLayoutGeom = new THREE.PlaneGeometry(1, 1);
     const hudMat = new THREE.MeshBasicMaterial({map: textureLoader.load(`assets/img/text_faces/text_face_${i}.png`, tx => {
 
@@ -444,9 +502,9 @@ const createHUDLayout = () => {
     }), transparent: true});
 
     const mesh = new THREE.Mesh(hudLayoutGeom, hudMat);
-    mesh.position.set(0, 1.2, - 1);
-    mesh.rotation.x = - .5;
-    mesh.scale.set(.8, .8, .8);
+    mesh.position.set(0, 1, - 1);
+    mesh.rotation.x = - .2;
+    mesh.scale.set(1.5, .4, .8);
     descriptionArray.push(mesh);
     descriptions.add(mesh);
   }
