@@ -432,7 +432,7 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
   });
 };*/
 
-// NOTE: Haven't added positions to Model class yet
+// NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
 
 const createRoverModel = () => {
   const container = new THREE.Object3D();

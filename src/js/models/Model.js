@@ -5,10 +5,12 @@ export default class Model {
   container
   src
   loadingManager
+  position
 
-  constructor(container, src, loadingManager) {
+  constructor(container, src, loadingManager, position) {
     this.container = container;
     this.src = src;
+    position === undefined ? this.position = [0, 0, 0] : this.position = position;
     this.loadingManager = loadingManager;
     this.init();
   }
@@ -29,7 +31,7 @@ this.mesh.rotation.y = 100;
       this.mesh.position.set(- 3, .5, - 15);
       this.mesh.rotation.x = - .25;*/
 
-
+      this.mesh.position.set(...this.position);
 
 
       this.container.add(this.mesh);
