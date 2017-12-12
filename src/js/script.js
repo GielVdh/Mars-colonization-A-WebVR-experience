@@ -792,6 +792,7 @@ const animate = () => {
     uiContainer.classList.add(`hidden`);
 
     stats.end();
+
     return;
   }
 
