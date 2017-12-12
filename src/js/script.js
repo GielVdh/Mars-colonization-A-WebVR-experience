@@ -1,18 +1,24 @@
 import * as THREE from 'three';
 import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
+import Stats from './vendors/stats.min';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
 
 import Text from './models/Text.js';
 import Terrain from './models/Terrain';
 import Model from './models/Model';
+import LoadingScreen from './models/LoadingScreen';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
 const container = document.getElementById(`world`),
+  uiContainer = document.getElementById(`ui`),
+  loadingText = document.querySelector(`.loading`),
   buttonArray = [],
   descriptionArray = [],
-  modelsArray = []; //noHeadset = document.getElementById(`no-headset`);
+  modelsArray = [],
+  mouse = new THREE.Vector2();
+   //noHeadset = document.getElementById(`no-headset`);
 
 let scene,
   renderer,
@@ -26,13 +32,18 @@ let scene,
   vrButton,
   skybox,
   //sceneHUD,
-  hudBitmap,
-  hudMaterial,
+  //hudBitmap,
+  //hudMaterial,
   hudLayoutGeom,
   INTERSECTED,
   cube,
   raycaster,
-  count = 0, descriptions;
+  count = 0,
+  descriptions,
+  loadingScreen,
+  loadingManager,
+  RESOURCES_LOADED = false,
+  stats;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -46,10 +57,10 @@ const init = () => {
   createScene();
   getVRDisplays();
   createSkyBox();
-  addCrosshair();
+
   createLights();
   createHUDLayout();
-  createHUD();
+  //createHUD();
   //createShape();
   createTitle();
   createModels();
@@ -78,7 +89,7 @@ const createFloor = () => {
 
 
 const createTerrain = () => {
-  new Terrain(scene, controls.userHeight);
+  new Terrain(scene, controls.userHeight, loadingManager);
 };
 
 
@@ -145,6 +156,10 @@ const onResize = () => {
   effect.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+
+  // make loadingScreen adapt when sizeof the screen is changed
+  loadingScreen.camera.aspect = window.innerWidth / window.innerHeight;
+  loadingScreen.camera.updateProjectionMatrix();
 };
 
 
@@ -163,6 +178,29 @@ const createScene = () => {
 
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight;
+
+  stats = new Stats();
+  stats.showPanel(0);
+  document.body.appendChild(stats.dom);
+
+  loadingScreen = new LoadingScreen();
+  loadingScreen.mesh.position.set(0, 0, - 5);
+  //console.log(loadingText);
+
+  // Loadingmanager to track progress of all the loaders --> extra propertie for the loaders
+  loadingManager = new THREE.LoadingManager();
+
+  loadingManager.onProgress = (item, loaded, total) => {
+    console.log(item, loaded, total);
+    loadingText.innerHTML = `${loaded} of ${total} loaded`;
+  };
+
+  loadingManager.onLoad = () => {
+    console.log(`loaded all resources`);
+    RESOURCES_LOADED = !RESOURCES_LOADED;
+  };
+
+
 
   /*
   window.addEventListener(`resize`, handleResize, true);
@@ -187,16 +225,24 @@ const createScene = () => {
   // renderer
   renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
   renderer.setPixelRatio(window.devicePixelRatio);
+  // TO DO EventListener for touch event
+  window.addEventListener(`touchstart`, handleCardboardTouch);
+  /*
+  window.addEventListener(`mousedown`, handleCardboardTouch);
+  window.addEventListener(`mousemove`, handleMouseMove);  */
+
+
+
   //renderer.autoClear = false;
   container.appendChild(renderer.domElement);
 
   // Apply VR stereo rendering to renderer.
   effect = new VREffect(renderer);
   effect.setSize(WIDTH, HEIGHT);
-  console.log(WIDTH / HEIGHT);
-  console.log(effect.render(scene, camera));
-  console.log(effect);
-  console.log(controls.camera);
+  //console.log(WIDTH / HEIGHT);
+  //console.log(effect.render(scene, camera));
+  //console.log(effect);
+  //console.log(controls.camera);
   /*
 enterVR.on(`enter`, () => {
     enterVR.requestEnterFullscreen().then(() => {});
@@ -213,6 +259,8 @@ enterVR.on(`enter`, () => {
   vrButton.on(`exit`, () => {
     camera.quaternion.set(0, 0, 0, 1);
     camera.position.set(0, controls.userHeight, 0);
+    window.removeEventListener(`mousedown`, handleCardboardTouch);
+    window.removeEventListener(`mousemove`, handleMouseMove);
   });
   vrButton.on(`hide`, () => {
     document.getElementById(`ui`).style.display = `none`;
@@ -221,7 +269,11 @@ enterVR.on(`enter`, () => {
     document.getElementById(`ui`).style.display = `inherit`;
   });
   document.getElementById(`vr-button`).appendChild(vrButton.domElement);
-  document.getElementById(`magic-window`).addEventListener(`click`, function() {
+  document.getElementById(`magic-window`).addEventListener(`click`, () => {
+    if (vrDisplay === window) {
+      window.addEventListener(`mousedown`, handleCardboardTouch);
+      window.addEventListener(`mousemove`, handleMouseMove);
+    }
     vrButton.requestEnterFullscreen().catch(e => {
       console.log(e);
       if (e.message === `e.manager.enterFullscreen(...).then is not a function`) {
@@ -247,6 +299,19 @@ enterVR.on(`enter`, () => {
   });  */
 
 
+};
+
+const handleCardboardTouch = () => {
+  if (INTERSECTED !== undefined) {
+    scrollDescriptions();
+  }
+};
+
+const handleMouseMove = e => {
+  e.preventDefault();
+
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
 };
 
 /*
@@ -367,13 +432,13 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
   });
 };*/
 
-
+// NOTE: Haven't added positions to Model class yet
 
 const createRoverModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/1/MSL_dirty.json`;
-  new Model(container, src);
+  new Model(container, src, loadingManager);
 
   return container;
 
@@ -385,6 +450,7 @@ const createERVModel = () => {
   const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
   new Model(container, src);
 
+
   return container;
 
 };
@@ -392,8 +458,9 @@ const createERVModel = () => {
 const createHabitatModel = () => {
   const container = new THREE.Object3D();
 
+
   const src = `../assets/3dmodels/3/hab.json`;
-  new Model(container, src);
+  new Model(container, src, loadingManager);
 
   return container;
 
@@ -403,7 +470,8 @@ const createCityModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/4/habitats.json`;
-  new Model(container, src);
+  new Model(container, src, loadingManager);
+
 
   return container;
 
@@ -445,7 +513,7 @@ const nextButton = () => {
 
   const content = `NEXT`;
 
-  new Text(nextButton, content, [- .08, 0, .1]);
+  new Text(nextButton, content, [- .08, 0, .1], loadingManager);
 
   scene.add(nextButton);
   buttonArray.push(cube);
@@ -466,30 +534,31 @@ const previousButton = () => {
 
   const content = `PREVIOUS`;
 
-  new Text(previousButton, content, [.08, 0, .1]);
+
+  new Text(previousButton, content, [.08, 0, .1], loadingManager);
 
   scene.add(previousButton);
   buttonArray.push(cube);
 };
 
 const scrollDescriptions = () => {
-  if (INTERSECTED !== undefined) {
-    if (INTERSECTED.name === `next` && count !== 5) {
-      count ++;
-      checkIfDescVisible();
-      checkIfModelVisible();
-    } else if (INTERSECTED.name === `previous` && count !== 0) {
-      count --;
-      checkIfDescVisible();
-      checkIfModelVisible();
-    }
+
+  if (INTERSECTED.name === `next` && count !== 5) {
+    count ++;
+    checkIfDescVisible();
+    checkIfModelVisible();
+  } else if (INTERSECTED.name === `previous` && count !== 0) {
+    count --;
+    checkIfDescVisible();
+    checkIfModelVisible();
   }
+
 
 
 };
 
 const createHUDLayout = () => {
-  const textureLoader = new THREE.TextureLoader();
+  const textureLoader = new THREE.TextureLoader(loadingManager);
   descriptions = new THREE.Object3D();
   for (let i = 0;i < 6;i ++) {
     hudLayoutGeom = new THREE.PlaneGeometry(1, 1);
@@ -537,7 +606,7 @@ const checkIfModelVisible = () => {
 
 // This function will probably be removed
 
-const createHUD = () => {
+/*const createHUD = () => {
 
   const hudCanvas = document.createElement(`canvas`);
   hudCanvas.width = WIDTH;
@@ -590,8 +659,8 @@ const createHUD = () => {
   //scene.add(hudMesh);
   //console.log(controls.camera);
 
-*/
-};
+
+};*/
 
 
 
@@ -649,7 +718,8 @@ const getVRDisplays = () => {
       vrDisplay = display;
       display.requestAnimationFrame(animate);
       display.bufferScale_ = 1;
-      console.log(effect);
+      addCrosshair();
+
     })
     .catch(() => {
       // If there is no display available, fallback to window
@@ -688,7 +758,7 @@ function setStageDimensions(stage) {
 const checkRay = () => {
 
   // set a raycaster starting from the cam pos
-  raycaster.setFromCamera({x: 0, y: 0}, controls.camera);
+  raycaster.setFromCamera(mouse, controls.camera);
 
   // array of objects who we want to be registered when intersected
   const intersects = raycaster.intersectObjects(buttonArray, true);
@@ -701,7 +771,7 @@ const checkRay = () => {
       INTERSECTED = intersects[0].object;
       INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
       INTERSECTED.material.emissive.setHex(0xff00);
-      scrollDescriptions();
+
     }
   } else {
     if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
@@ -709,9 +779,22 @@ const checkRay = () => {
   }
 };
 
-
-
 const animate = () => {
+  stats.begin();
+  // when resources are not fully loaded = Loadingscreen and vr ui hidden
+  if (RESOURCES_LOADED === false) {
+    stats.begin();
+    window.requestAnimationFrame(animate);
+    loadingScreen.mesh.rotation.y += .01;
+    loadingScreen.shieldMesh.rotation.x -= 0.001;
+    loadingScreen.shieldMesh.rotation.y -= 0.001;
+    renderer.render(loadingScreen.scene, loadingScreen.camera);
+    uiContainer.classList.add(`hidden`);
+
+    stats.end();
+    return;
+  }
+
 
   //cube.rotation.x += 0.005;
   //cube.rotation.y += 0.01;
@@ -749,6 +832,8 @@ const animate = () => {
   }
   //console.log(camera.rotation);
   checkRay();
+  uiContainer.classList.remove(`hidden`);
+  loadingText.classList.add(`hidden`);
 
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
@@ -757,7 +842,9 @@ const animate = () => {
   //console.log(renderer.vr.getDevice());
   //effect.render(scene, camera);
   //console.log(vrDisplay);
+  stats.end();
   window.requestAnimationFrame(animate);
+
   //console.log(vrDisplay);
 };
 

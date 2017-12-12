@@ -3,15 +3,21 @@ import TerrainLoader from '../lib/TerrainLoader';
 
 export default class Terrain {
 
-  constructor(scene, userHeight) {
+  scene
+  userHeight
+  loadingManager
+
+  constructor(scene, userHeight, loadingManager) {
     this.userHeight = userHeight;
     this.scene = scene;
+    this.loadingManager = loadingManager;
+
     this.init();
   }
 
   init() {
 
-    const terrainLoader = new TerrainLoader();
+    const terrainLoader = new TerrainLoader(this.loadingManager);
 
     terrainLoader.load(`../assets/img/output.bin`, data => {
       const terrainGeom = new THREE.PlaneGeometry(60, 100, 99, 999);
@@ -21,7 +27,7 @@ export default class Terrain {
       }
 
       const material = new THREE.MeshLambertMaterial({
-        map: new THREE.TextureLoader().load(`../assets/img/color.jpg`)
+        map: new THREE.TextureLoader(this.loadingManager).load(`../assets/img/color.jpg`)
         //color: 0x000000
       });
 
