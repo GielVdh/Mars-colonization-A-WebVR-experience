@@ -38,6 +38,7 @@
     "three": "^0.88.0",
     "three-vrcontrols-module": "^2.1.0",
     "three-vreffect-module": "^2.1.0",
+    "tween.js": "^16.6.0",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.0",
     "webpack-config-htmls": "^1.0.1",

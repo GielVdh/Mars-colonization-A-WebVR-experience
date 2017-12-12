@@ -14,6 +14,7 @@ import LoadingScreen from './models/LoadingScreen';
 const container = document.getElementById(`world`),
   uiContainer = document.getElementById(`ui`),
   loadingText = document.querySelector(`.loading`),
+  loaderAnim = document.querySelector(`.loader`),
   buttonArray = [],
   descriptionArray = [],
   modelsArray = [],
@@ -184,7 +185,6 @@ const createScene = () => {
   document.body.appendChild(stats.dom);
 
   loadingScreen = new LoadingScreen();
-  loadingScreen.mesh.position.set(0, 0, - 5);
   //console.log(loadingText);
 
   // Loadingmanager to track progress of all the loaders --> extra propertie for the loaders
@@ -785,9 +785,6 @@ const animate = () => {
   if (RESOURCES_LOADED === false) {
     stats.begin();
     window.requestAnimationFrame(animate);
-    loadingScreen.mesh.rotation.y += .01;
-    loadingScreen.shieldMesh.rotation.x -= 0.001;
-    loadingScreen.shieldMesh.rotation.y -= 0.001;
     renderer.render(loadingScreen.scene, loadingScreen.camera);
     uiContainer.classList.add(`hidden`);
 
@@ -835,6 +832,7 @@ const animate = () => {
   checkRay();
   uiContainer.classList.remove(`hidden`);
   loadingText.classList.add(`hidden`);
+  loaderAnim.classList.add(`hidden`);
 
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
