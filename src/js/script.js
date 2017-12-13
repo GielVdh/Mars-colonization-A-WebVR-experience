@@ -427,8 +427,8 @@ const createRoverModel = () => {
 
   const src = `../assets/3dmodels/1/MSL_dirty.json`;
   //new Model(container, src, loadingManager);
-  new Model(container, src, loadingManager, [0, 0, 0], [.7, .7, .7], [- .2, 0, 0]);
-  new Model(container, src, loadingManager, [20, 2, 10], [.5, .5, .5], [0, 0, 0]);
+  new Model(container, src, loadingManager, [0, 0, 0], [.5, .5, .5], [- .2, 0, 0]);
+  new Model(container, src, loadingManager, [20, .55, 10], [.5, .5, .5], [0, 0, 0]);
 
   return container;
 
@@ -447,13 +447,14 @@ const createHabitatModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/3/hab.json`;
-  const src2 = `../assets/3dmodels/3/astronaut.json`;
+  //const src2 = `../assets/3dmodels/3/astronaut.json`;
   const src3 = `../assets/3dmodels/3/astronaut2.json`;
-
+  const src4 = `../assets/3dmodels/3/astronaut3.json`;
 
   new Model(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
-  new Model(container, src2, loadingManager, [- 5, 0, - 1], [20, 20, 20], [0, 0, 0]);
-  new Model(container, src3, loadingManager, [- 5, 1, - 2], [.7, .7, .7], [0, 0, 0]);
+  //new Model(container, src2, loadingManager, [- 5, 0, - 1], [20, 20, 20], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
+  new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
 
   return container;
 
@@ -466,11 +467,16 @@ const createCityModel = () => {
   const src = `../assets/3dmodels/4/habitats2.json`;
   const src2 = `../assets/3dmodels/4/dome_all.json`;
   const src3 = `../assets/3dmodels/4/dome_1.json`;
+  const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
   //new Model(container, src, loadingManager, [- 10, .7, - 25], [.3, .3, .3], [0, - .2, 0]);
   new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
   new Model(container, src2, loadingManager, [15, - 3.5, 25], [.5, .5, .5], [0, 0, 0]);
   new Model(container, src3, loadingManager, [17, 0, 20], [.25, .25, .25], [0, 2.5, 0]);
+  new Model(container, src4, loadingManager, [30, 0, 20], [.7, .7, .7], [.04, 0, 0]);
+  new Model(container, src4, loadingManager, [36, .8, 15], [.7, .7, .7], [.04, .3, 0]);
+  new Model(container, src4, loadingManager, [31, .5, 11], [.7, .7, .7], [.08, .3, .1]);
+  new Model(container, src4, loadingManager, [35, .8, 5], [.7, .7, .7], [.08, .3, .1]);
 
   return container;
 
@@ -479,8 +485,14 @@ const createCityModel = () => {
 const createChimneysModel = () => {
   const container = new THREE.Object3D();
 
-  const src = `../assets/3dmodels/5/chimney2.json`;
-  new Model(container, src, loadingManager, [10, 6, - 16], [.9, .9, .9], [.2, - .2, 0]);
+  //const src = `../assets/3dmodels/5/chimney2.json`;
+  const src2 = `../assets/3dmodels/5/chimney3.json`;
+
+  //new Model(container, src, loadingManager, [10, 6, - 16], [.9, .9, .9], [.2, - .2, 0]);
+  new Model(container, src2, loadingManager, [10, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+  new Model(container, src2, loadingManager, [5, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+  new Model(container, src2, loadingManager, [15, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+
   return container;
 
 };
@@ -490,9 +502,22 @@ const createTerraformingModel = () => {
 
   const src = `../assets/3dmodels/6/birch_tree.json`;
   const src2 = `../assets/3dmodels/6/trees_lo_poly.json`;
+  const src3 = `../assets/3dmodels/6/Bush1.json`;
+  //const src4 = `../assets/3dmodels/6/tanne_pine.json`;
 
   new Model(container, src, loadingManager, [5, 4, - 5], [2, 2, 2], [0, 0, 0]);
   new Model(container, src2, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
+  new Model(container, src3, loadingManager, [- 7, - .5, 10], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 5, - .5, 11], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 3, - .5, 12], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 7, - .5, 13], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 6, - .5, 14], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 4, - .5, 15], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 7, - .5, 16], [.7, .7, .7], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 6, - .5, 17], [.7, .7, .7], [0, 0, 0]);
+  //new Model(container, src4, loadingManager, [0, 0, 0], [2, 2, 2], [0, 0, 0]);
+
+
   return container;
 
 };
