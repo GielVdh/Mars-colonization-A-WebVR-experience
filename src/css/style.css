@@ -30,6 +30,8 @@ body {
 
 .magic-window {
   display: block;
+  background-color: #78dad6;
+  padding: 1rem 1.5rem;
   color: white;
   margin-top: 1rem;
 }

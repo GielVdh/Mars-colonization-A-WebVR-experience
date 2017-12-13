@@ -345,48 +345,36 @@ const createModels = () => {
 
   // add rover to te modelsContainer and push it to the models array
   const rover = createRoverModel();
-  rover.position.set(- 10, - .5, - 10);
-  rover.rotation.set(- .3, 6, 0);
-  rover.scale.set(1, 1, 1);
+  //rover.position.set(- 10, - .5, - 10);
+  //rover.rotation.set(- .3, 6, 0);
+  //rover.scale.set(1, 1, 1);
   modelsContainer.add(rover);
   modelsArray.push(rover);
 
   // add buildings to te modelsContainer and push it to the models array
   const erv = createERVModel();
-  erv.position.set(- 15, 0, - 5);
-  erv.rotation.set(0, 5, 0);
-  erv.scale.set(.7, .7, .7);
   modelsContainer.add(erv);
   modelsArray.push(erv);
 
   // add buildings to te modelsContainer and push it to the models array
   const habitat = createHabitatModel();
-  habitat.position.set(- 20, - .5, - 1);
-  habitat.rotation.set(.04, 0, 0);
-  habitat.scale.set(.7, .7, .7);
   modelsContainer.add(habitat);
   modelsArray.push(habitat);
 
   // add buildings to te modelsContainer and push it to the models array
   const city = createCityModel();
-  city.position.set(- 10, .7, - 25);
-  city.rotation.set(0, - .2, 0);
-  city.scale.set(.3, .3, .3);
   modelsContainer.add(city);
   modelsArray.push(city);
 
   // add buildings to te modelsContainer and push it to the models array
   const chimneys = createChimneysModel();
-  chimneys.position.set(10, 6, - 16);
-  chimneys.rotation.set(.2, - .2, 0);
-  chimneys.scale.set(.9, .9, .9);
   modelsContainer.add(chimneys);
   modelsArray.push(chimneys);
 
   // add rover to te modelsContainer and push it to the models array
   const terraforming = createTerraformingModel();
-  terraforming.position.set(5, 4, - 5);
-  terraforming.scale.set(2, 2, 2);
+  // terraforming.position.set(5, 4, - 5);
+  // terraforming.scale.set(2, 2, 2);
   modelsContainer.add(terraforming);
   modelsArray.push(terraforming);
 
@@ -438,7 +426,9 @@ const createRoverModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/1/MSL_dirty.json`;
-  new Model(container, src, loadingManager);
+  //new Model(container, src, loadingManager);
+  new Model(container, src, loadingManager, [0, 0, 0], [.7, .7, .7], [- .2, 0, 0]);
+  new Model(container, src, loadingManager, [20, 2, 10], [.5, .5, .5], [0, 0, 0]);
 
   return container;
 
@@ -448,9 +438,7 @@ const createERVModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
-  new Model(container, src);
-
-
+  new Model(container, src, loadingManager, [- 15, 0, - 5], [.7, .7, .7], [0, 5, 0]);
   return container;
 
 };
@@ -458,9 +446,14 @@ const createERVModel = () => {
 const createHabitatModel = () => {
   const container = new THREE.Object3D();
 
-
   const src = `../assets/3dmodels/3/hab.json`;
-  new Model(container, src, loadingManager);
+  const src2 = `../assets/3dmodels/3/astronaut.json`;
+  const src3 = `../assets/3dmodels/3/astronaut2.json`;
+
+
+  new Model(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
+  new Model(container, src2, loadingManager, [- 5, 0, - 1], [20, 20, 20], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [- 5, 1, - 2], [.7, .7, .7], [0, 0, 0]);
 
   return container;
 
@@ -469,9 +462,15 @@ const createHabitatModel = () => {
 const createCityModel = () => {
   const container = new THREE.Object3D();
 
-  const src = `../assets/3dmodels/4/habitats.json`;
-  new Model(container, src, loadingManager);
+  //const src = `../assets/3dmodels/4/habitats.json`;
+  const src = `../assets/3dmodels/4/habitats2.json`;
+  const src2 = `../assets/3dmodels/4/dome_all.json`;
+  const src3 = `../assets/3dmodels/4/dome_1.json`;
 
+  //new Model(container, src, loadingManager, [- 10, .7, - 25], [.3, .3, .3], [0, - .2, 0]);
+  new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
+  new Model(container, src2, loadingManager, [15, - 3.5, 25], [.5, .5, .5], [0, 0, 0]);
+  new Model(container, src3, loadingManager, [17, 0, 20], [.25, .25, .25], [0, 2.5, 0]);
 
   return container;
 
@@ -481,8 +480,7 @@ const createChimneysModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/5/chimney2.json`;
-  new Model(container, src);
-
+  new Model(container, src, loadingManager, [10, 6, - 16], [.9, .9, .9], [.2, - .2, 0]);
   return container;
 
 };
@@ -491,8 +489,10 @@ const createTerraformingModel = () => {
   const container = new THREE.Object3D();
 
   const src = `../assets/3dmodels/6/birch_tree.json`;
-  new Model(container, src);
+  const src2 = `../assets/3dmodels/6/trees_lo_poly.json`;
 
+  new Model(container, src, loadingManager, [5, 4, - 5], [2, 2, 2], [0, 0, 0]);
+  new Model(container, src2, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
   return container;
 
 };
