@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as TWEEN from 'tween.js';
 import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
 import Stats from './vendors/stats.min';
@@ -10,6 +11,10 @@ import Terrain from './models/Terrain';
 import Model from './models/Model';
 import LoadingScreen from './models/LoadingScreen';
 //import {MeshText2D, textAlign} from 'three-text2d';
+
+// NOTE: Functions will be moved to a new group model
+//import fadeAnim from './animations/fadeAnim';
+import tweenAnim from './animations/tweenAnim';
 
 const container = document.getElementById(`world`),
   uiContainer = document.getElementById(`ui`),
@@ -338,7 +343,7 @@ const addCrosshair = () => {
 
 
 const createModels = () => {
-  const modelsContainer = new THREE.Object3D();
+  const modelsContainer = new THREE.Group();
   modelsContainer.rotation.y = 100;
   //container.position.y = 1.5;
   modelsContainer.position.set(- 3, - 1, - 10);
@@ -377,7 +382,6 @@ const createModels = () => {
   // terraforming.scale.set(2, 2, 2);
   modelsContainer.add(terraforming);
   modelsArray.push(terraforming);
-
 
   checkIfModelVisible();
   scene.add(modelsContainer);
@@ -423,7 +427,7 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 // NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
 
 const createRoverModel = () => {
-  const container = new THREE.Object3D();
+  const container = new THREE.Group();
 
   const src = `../assets/3dmodels/1/MSL_dirty.json`;
   //new Model(container, src, loadingManager);
@@ -435,16 +439,18 @@ const createRoverModel = () => {
 };
 
 const createERVModel = () => {
-  const container = new THREE.Object3D();
+  const container = new THREE.Group();
+  container.name = `ERV`;
 
   const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
-  new Model(container, src, loadingManager, [- 15, 0, - 5], [.7, .7, .7], [0, 5, 0]);
+  new Model(container, src, loadingManager, [- 15, 20, - 5], [.7, .7, .7], [0, 5, 0]);
+
   return container;
 
 };
 
 const createHabitatModel = () => {
-  const container = new THREE.Object3D();
+  const container = new THREE.Group();
 
   const src = `../assets/3dmodels/3/hab.json`;
   const src3 = `../assets/3dmodels/3/astronaut2.json`;
@@ -460,7 +466,7 @@ const createHabitatModel = () => {
 };
 
 const createCityModel = () => {
-  const container = new THREE.Object3D();
+  const container = new THREE.Group();
 
   const src = `../assets/3dmodels/4/habitats2.json`;
   const src2 = `../assets/3dmodels/4/dome_all.json`;
@@ -485,7 +491,7 @@ const createCityModel = () => {
 };
 
 const createChimneysModel = () => {
-  const container = new THREE.Object3D();
+  const container = new THREE.Group();
 
   const src2 = `../assets/3dmodels/5/chimney3.json`;
 
@@ -498,7 +504,7 @@ const createChimneysModel = () => {
 };
 
 const createTerraformingModel = () => {
-  const container = new THREE.Object3D();
+  const container = new THREE.Group();
 
   const src2 = `../assets/3dmodels/6/trees_lo_poly.json`;
   const src4 = `../assets/3dmodels/6/pine_tree.json`;
@@ -586,9 +592,6 @@ const scrollDescriptions = () => {
     checkIfDescVisible();
     checkIfModelVisible();
   }
-
-
-
 };
 
 const createHUDLayout = () => {
@@ -612,7 +615,7 @@ const createHUDLayout = () => {
     descriptions.add(mesh);
   }
   checkIfDescVisible();
-  console.log(descriptions);
+
   scene.add(descriptions);
 };
 
@@ -630,12 +633,52 @@ const checkIfModelVisible = () => {
   modelsArray.forEach((e, id) => {
     if (id === count) {
       e.visible = true;
+      startAnim(e);
     } else if (id < count) {
       e.visible = true;
     } else {
       e.visible = false;
     }
   });
+};
+
+const startAnim = e => {
+
+  if (e.name === `ERV`) {
+    const target = new THREE.Vector3(0, - 20, 0);
+    tweenAnim(e.position, target, {
+      duration: 5000,
+      easing: TWEEN.Easing.Exponential.Out,
+      update: d => {
+        console.log(`Updating: ${  d}`);
+      },
+
+      callback: () => {
+        console.log(`Completed`);
+      }
+    });
+  }
+  /*
+e.children.forEach(ec => {
+    console.log(ec);
+
+    if (INTERSECTED.name !== `previous`) {
+
+      const anim = fadeAnim(ec, `out`, {
+        duration: 1000,
+
+        easing: TWEEN.Easing.Quintic.InOut,
+
+        callback: () => {
+          console.log(`Fade complete`);
+        }
+
+      });
+      anim.start();
+    }
+  });*/
+
+
 };
 
 // This function will probably be removed
@@ -813,7 +856,7 @@ const checkRay = () => {
   }
 };
 
-const animate = () => {
+const animate = time => {
   stats.begin();
   // when resources are not fully loaded = Loadingscreen and vr ui hidden
   if (RESOURCES_LOADED === false) {
@@ -867,6 +910,7 @@ const animate = () => {
   uiContainer.classList.remove(`hidden`);
   loadingText.classList.add(`hidden`);
   loaderAnim.classList.add(`hidden`);
+  TWEEN.update(time);
 
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
