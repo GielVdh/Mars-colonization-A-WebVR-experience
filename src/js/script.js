@@ -49,7 +49,9 @@ let scene,
   loadingScreen,
   loadingManager,
   RESOURCES_LOADED = false,
-  stats;
+  stats,
+  roverRotation,
+  roverTranslation;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -202,10 +204,9 @@ const createScene = () => {
 
   loadingManager.onLoad = () => {
     console.log(`loaded all resources`);
+    checkIfModelVisible();
     RESOURCES_LOADED = !RESOURCES_LOADED;
   };
-
-
 
   /*
   window.addEventListener(`resize`, handleResize, true);
@@ -214,7 +215,6 @@ const createScene = () => {
   //scene
   scene = new THREE.Scene();
   console.log(scene);
-
 
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .1, 1000);
 
@@ -259,7 +259,7 @@ enterVR.on(`enter`, () => {
   };
   vrButton = new webvrui.EnterVRButton(renderer.domElement, uiOptions);
   vrButton.on(`enter`, () => {
-
+    roverRotation.start();
   });
   vrButton.on(`exit`, () => {
     camera.quaternion.set(0, 0, 0, 1);
@@ -383,7 +383,7 @@ const createModels = () => {
   modelsContainer.add(terraforming);
   modelsArray.push(terraforming);
 
-  checkIfModelVisible();
+  //checkIfModelVisible();
   scene.add(modelsContainer);
 
 };
@@ -428,6 +428,8 @@ const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
 
 const createRoverModel = () => {
   const container = new THREE.Group();
+
+  container.name = `rover`;
 
   const src = `../assets/3dmodels/1/MSL_dirty.json`;
   //new Model(container, src, loadingManager);
@@ -646,18 +648,58 @@ const startAnim = e => {
 
   if (e.name === `ERV`) {
     const target = new THREE.Vector3(0, - 20, 0);
-    tweenAnim(e.position, target, {
+    const ervAnim = tweenAnim(e.position, target, {
       duration: 5000,
       easing: TWEEN.Easing.Exponential.Out,
-      update: d => {
-        console.log(`Updating: ${  d}`);
-      },
-
       callback: () => {
         console.log(`Completed`);
       }
     });
+    ervAnim.start();
   }
+
+  if (e.name === `rover`) {
+    const obj = e.children[0];
+    const target1 = new THREE.Vector3(0, - 1, 0);
+    roverRotation = tweenAnim(obj.rotation, target1, {
+      duration: 5000,
+      easing: TWEEN.Easing.Linear.none,
+      callback: () => {
+        console.log(`Completed`);
+      }
+    });
+
+    const target2 = new THREE.Vector3(- 3, 0, 0);
+    roverTranslation = tweenAnim(obj.position, target2, {
+      duration: 6000,
+      easing: TWEEN.Easing.Linear.None,
+      callback: () => {
+        console.log(`Completed`);
+      }
+    });
+    roverRotation.chain(roverTranslation);
+    const target3 = new THREE.Vector3(0, .9, 0);
+    const roverRotation2 = tweenAnim(obj.rotation, target3, {
+      duration: 6000,
+      easing: TWEEN.Easing.Linear.None,
+      callback: () => {
+        console.log(`Completed`);
+      }
+    });
+    roverTranslation.chain(roverRotation2);
+
+    const target4 = new THREE.Vector3(- 1, 0, 2);
+    const roverRotation3 = tweenAnim(obj.position, target4, {
+      duration: 6000,
+      easing: TWEEN.Easing.Linear.None,
+      callback: () => {
+        console.log(`Completed`);
+      }
+    });
+    roverRotation2.chain(roverRotation3);
+  }
+
+
   /*
 e.children.forEach(ec => {
     console.log(ec);

@@ -14,6 +14,7 @@ export default class Model {
   loadingManager
   position
   anim
+  mesh
 
   constructor(container, src, loadingManager, position, scale, rotation) {
     this.container = container;
@@ -47,7 +48,6 @@ this.mesh.rotation.y = 100;
       this.mesh.scale.set(...this.scale);
       this.mesh.rotation.set(...this.rotation);
 
-
       /*
 if (this.container.visible === true) {
         trackOriginalOpacities(this.mesh);
@@ -70,6 +70,9 @@ if (this.container.visible === true) {
     }, /*this.onProgress*/);
   }
 
+  getMesh() {
+    return this.mesh;
+  }
 
   /*
 onProgress(xhr) {

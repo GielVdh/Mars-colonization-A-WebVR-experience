@@ -13,18 +13,13 @@ export default (obj, target, options) => {
   const tween = new TWEEN.Tween(obj)
     .to({x: to.x, y: to.y, z: to.z}, duration)
     .easing(easing)
-    .onUpdate(d => {
-      if (options.update) {
-        options.update(d);
-      }
-    })
     .onComplete(() => {
       if (options.callback) {
         options.callback();
       }
     });
 
-  tween.start();
+
 
   return tween;
 };
