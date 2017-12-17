@@ -22,7 +22,7 @@ export default class Text {
   init() {
     const loader = new THREE.FontLoader(this.loadingManager);
     console.log(loader);
-    loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
+    loader.load(`../assets/fonts/DS-Digital_Bold.json`, font => {
 
       const color = 0xffffff;
 
