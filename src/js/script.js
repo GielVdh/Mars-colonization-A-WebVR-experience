@@ -10,6 +10,7 @@ import Text from './models/Text.js';
 import Terrain from './models/Terrain';
 import Model from './models/Model';
 import LoadingScreen from './models/LoadingScreen';
+import ParticleEmitter from './models/ParticleEmitter';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
 // NOTE: Functions will be moved to a new group model
@@ -51,7 +52,8 @@ let scene,
   RESOURCES_LOADED = false,
   stats,
   roverRotation,
-  roverTranslation;
+  roverTranslation,
+  particles;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -259,6 +261,7 @@ enterVR.on(`enter`, () => {
   };
   vrButton = new webvrui.EnterVRButton(renderer.domElement, uiOptions);
   vrButton.on(`enter`, () => {
+    TWEEN.removeAll();
     roverRotation.start();
   });
   vrButton.on(`exit`, () => {
@@ -443,7 +446,7 @@ const createRoverModel = () => {
 const createERVModel = () => {
   const container = new THREE.Group();
   container.name = `ERV`;
-
+  particles = new ParticleEmitter(container, loadingManager);
   const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
   new Model(container, src, loadingManager, [- 15, 20, - 5], [.7, .7, .7], [0, 5, 0]);
 
@@ -953,7 +956,7 @@ const animate = time => {
   loadingText.classList.add(`hidden`);
   loaderAnim.classList.add(`hidden`);
   TWEEN.update(time);
-
+  particles.update();
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
   //renderer.render(sceneHUD, cameraHUDOrt);
