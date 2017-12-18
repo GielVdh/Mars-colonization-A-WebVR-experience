@@ -12,7 +12,14 @@ import Model from './models/Model';
 import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
 //import ParticleEmitter from './models/ParticleEmitter';
+<<<<<<< HEAD
 //import {MeshText2D, textAlign} from 'three-text2d';
+=======
+
+import SolarPanelGroup from './groups/SolarPanelGroup.js';
+import ChimneyGroup from './groups/ChimneyGroup.js';
+//import AstronautsGroup from './groups/AstronautsGroup.js';
+>>>>>>> removed MLS_dirty and added a les GPU heavy rover model
 
 // NOTE: Functions will be moved to a new group model
 //import fadeAnim from './animations/fadeAnim';
@@ -300,7 +307,7 @@ const createRoverModel = () => {
 
   container.name = `rover`;
 
-  const src = `../assets/3dmodels/1/MSL_dirty.json`;
+  const src = `../assets/3dmodels/1/rover.json`;
   //new Model(container, src, loadingManager);
   new Model(container, src, loadingManager, [0, 0, 0], [.5, .5, .5], [- .2, 0, 0]);
   //new Model(container, src, loadingManager, [20, .55, 10], [.5, .5, .5], [0, 0, 0]);
@@ -325,16 +332,23 @@ const createHabitatModel = () => {
 
   const src = `../assets/3dmodels/3/hab.json`;
 
+  /*
   const src3 = `../assets/3dmodels/3/astronaut2.json`;
-  const src4 = `../assets/3dmodels/3/astronaut3.json`;
+  const src4 = `../assets/3dmodels/3/astronaut3.json`;  */
+
+
 
 
 
   new BufferModel(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
 
-  new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
+  //new AstronautsGroup(container, loadingManager);
+  /*
+new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
   new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
   new Model(container, src4, loadingManager, [5, 0, 15], [.7, .7, .7], [0, 3, 0]);
+*/
+
 
 
 
@@ -346,12 +360,12 @@ const createCityModel = () => {
   const container = new THREE.Group();
 
   //const src = `../assets/3dmodels/4/habitats2.json`;
-  const src = `../assets/3dmodels/4/habitats.json`;
+  const src = `../assets/3dmodels/4/habitats3.json`;
   //const src2 = `../assets/3dmodels/4/dome_all.json`;
   //const src3 = `../assets/3dmodels/4/dome_2.json`;
   const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
-  new BufferModel(container, src, loadingManager, [- 10, .7, - 30], [.5, .5, .5], [0, - .5, 0]);
+  new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
 
   /*
   new Model(container, src2, loadingManager, [10, - 1, 25], [1.1, 1.1, 1.1], [.05, 5, 0]);
@@ -530,6 +544,7 @@ const checkIfModelVisible = () => {
   });
 };
 
+
 const startAnim = e => {
 
   if (e.name === `ERV`) {
@@ -584,6 +599,8 @@ const startAnim = e => {
     });
     roverRotation2.chain(roverRotation3);
   }
+
+
 
 
   /*
@@ -661,7 +678,7 @@ const getVRDisplays = () => {
     .then(display => {
       //console.log(display.requestAnimationFrame);
       vrDisplay = display;
-      display.requestAnimationFrame(animate);
+      //display.requestAnimationFrame(animate);
       display.bufferScale_ = 1;
       addCrosshair();
 
@@ -669,7 +686,7 @@ const getVRDisplays = () => {
     .catch(() => {
       // If there is no display available, fallback to window
       vrDisplay = window;
-      window.requestAnimationFrame(animate);
+      //window.requestAnimationFrame(animate);
     });
 
 };
@@ -733,9 +750,7 @@ const animate = time => {
 
     renderer.render(loadingScreen.scene, loadingScreen.camera);
     uiContainer.classList.add(`hidden`);
-    console.log(renderer.info);
     window.requestAnimationFrame(animate);
-
 
     return;
   }
