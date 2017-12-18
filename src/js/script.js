@@ -12,14 +12,10 @@ import Model from './models/Model';
 import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
 //import ParticleEmitter from './models/ParticleEmitter';
-<<<<<<< HEAD
-//import {MeshText2D, textAlign} from 'three-text2d';
-=======
 
 import SolarPanelGroup from './groups/SolarPanelGroup.js';
 import ChimneyGroup from './groups/ChimneyGroup.js';
 //import AstronautsGroup from './groups/AstronautsGroup.js';
->>>>>>> removed MLS_dirty and added a les GPU heavy rover model
 
 // NOTE: Functions will be moved to a new group model
 //import fadeAnim from './animations/fadeAnim';
@@ -363,7 +359,6 @@ const createCityModel = () => {
   const src = `../assets/3dmodels/4/habitats3.json`;
   //const src2 = `../assets/3dmodels/4/dome_all.json`;
   //const src3 = `../assets/3dmodels/4/dome_2.json`;
-  const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
   new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
 
@@ -375,11 +370,7 @@ const createCityModel = () => {
   new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
 */
 
-
-  new BufferModel(container, src4, loadingManager, [30, 0, 20], [.7, .7, .7], [.04, 0, 0]);
-  new BufferModel(container, src4, loadingManager, [36, .8, 15], [.7, .7, .7], [.04, .3, 0]);
-  new BufferModel(container, src4, loadingManager, [31, .5, 11], [.7, .7, .7], [.08, .3, .1]);
-  new BufferModel(container, src4, loadingManager, [35, .8, 5], [.7, .7, .7], [.08, .3, .1]);
+  new SolarPanelGroup(container, loadingManager);
 
   return container;
 
@@ -388,11 +379,7 @@ const createCityModel = () => {
 const createChimneysModel = () => {
   const container = new THREE.Group();
 
-  const src2 = `../assets/3dmodels/5/chimney3.json`;
-
-  new BufferModel(container, src2, loadingManager, [10, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
-  new BufferModel(container, src2, loadingManager, [5, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
-  new BufferModel(container, src2, loadingManager, [15, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+  new ChimneyGroup(container, loadingManager);
 
   return container;
 
