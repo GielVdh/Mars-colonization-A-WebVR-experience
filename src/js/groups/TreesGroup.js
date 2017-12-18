@@ -27,20 +27,12 @@ export default class TreesGroup {
     scale: [.7, .7, .7]
   },
   {
-    position: [17, 3, - 2],
-    scale: [.9, .9, .9]
-  },
-  {
     position: [- 43, 0, - 25],
     scale: [.9, .9, .9]
   },
   {
     position: [- 28, 1, - 32],
     scale: [.9, .9, .9]
-  },
-  {
-    position: [17, 3, 3],
-    scale: [1, 1, 1]
   },
   {
     position: [- 52, 0, - 22],
@@ -77,7 +69,7 @@ export default class TreesGroup {
   }]
 
   rotation = [0, 0, 0];
-  src = `../../assets/3dmodels/6/low_poly2.json`;
+  src = `assets/3dmodels/6/low_poly2.json`;
 
   constructor(container, loadingManager) {
 

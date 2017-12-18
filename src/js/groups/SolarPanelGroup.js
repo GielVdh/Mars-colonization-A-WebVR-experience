@@ -19,7 +19,7 @@ export default class SolarPanelGroup {
   }]
 
   scale = [.7, .7, .7];
-  src = `../../assets/3dmodels/4/solarpanel.json`;
+  src = `assets/3dmodels/4/solarpanel.json`;
 
   constructor(container, loadingManager) {
 

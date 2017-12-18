@@ -14,7 +14,7 @@ export default class ParticleEmitter {
       color: 0xFFFFFF,
       size: 3,
       map: this.textureLoader.load(
-   `../../assets/img/icon_test.png`
+   `assets/img/icon_test.png`
  ),
       blending: THREE.AdditiveBlending,
       transparent: true

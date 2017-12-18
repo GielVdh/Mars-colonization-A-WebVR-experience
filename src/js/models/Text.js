@@ -21,8 +21,8 @@ export default class Text {
 // TO DO: adjust for geometry text
   init() {
     const loader = new THREE.FontLoader(this.loadingManager);
-    console.log(loader);
-    loader.load(`../assets/fonts/DS-Digital_Bold.json`, font => {
+
+    loader.load(`assets/fonts/DS-Digital_Bold.json`, font => {
 
       const color = 0xffffff;
 
@@ -47,40 +47,13 @@ export default class Text {
 
       const txt = new THREE.Mesh(txtShape, mat);
       txt.position.set(...this.position);
-      /*
-txt.position.x = .08;
-      txt.position.y = .07;
-      txt.position.z = .3;*/
-
 
       this.scene.add(txt);
-
-      /*
-      console.log(font);
-      this.txtGeom = new THREE.TextGeometry(this.content, {
-        font: font,
-        size: 5,
-        height: 1,
-        curveSegments: 12,
-        bevelEnabled: false,
-      });
-
-      //console.log(this.camera.position);
-      const txtMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
-      this.txtMesh = new THREE.Mesh(this.txtGeom, txtMaterial);
-      this.txtMesh.position.set(...this.position);
-      this.txtMesh.rotation.set(...this.rotation);
-
-      this.txtMesh.name = `text`;
-      this.scene.add(this.txtMesh);
-      */
-
 
     });
   }
 
   lookAt(camera) {
-    console.log(camera);
     this.txtMesh.lookAt(camera.position);
   }
 

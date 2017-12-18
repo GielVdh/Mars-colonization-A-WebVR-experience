@@ -13,7 +13,7 @@ const {ifProduction, ifDevelopment} = getIfUtils(process.env.NODE_ENV);
 
 const extractCSS = new ExtractTextWebpackPlugin(`css/style.css`);
 
-// change for production build on different server path
+// change for production build on different server path http://student.howest.be/giel.vanden.herrew1/20172018/EXW/WebVR/
 const publicPath = `/`;
 
 const port = 3000;

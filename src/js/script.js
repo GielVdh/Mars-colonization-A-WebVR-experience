@@ -214,6 +214,7 @@ const createScene = () => {
 };
 
 const handleCardboardTouch = () => {
+  //e.preventDefault();
   if (INTERSECTED !== undefined) {
     scrollDescriptions();
   }
@@ -279,7 +280,7 @@ const createModels = () => {
   modelsArray.push(city);
 
   // add buildings to te modelsContainer and push it to the models array
-  const chimneys = createChimneysModel();
+  const chimneys =   new ChimneyGroup(loadingManager);
   modelsContainer.add(chimneys);
   modelsArray.push(chimneys);
 
@@ -303,7 +304,7 @@ const createRoverModel = () => {
 
   container.name = `rover`;
 
-  const src = `../assets/3dmodels/1/rover.json`;
+  const src = `assets/3dmodels/1/rover.json`;
   //new Model(container, src, loadingManager);
   new Model(container, src, loadingManager, [0, 0, 0], [.5, .5, .5], [- .2, 0, 0]);
   //new Model(container, src, loadingManager, [20, .55, 10], [.5, .5, .5], [0, 0, 0]);
@@ -316,7 +317,7 @@ const createERVModel = () => {
   const container = new THREE.Group();
   container.name = `ERV`;
   //particles = new ParticleEmitter(container, loadingManager);
-  const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
+  const src = `assets/3dmodels/2/MarsDirect_ERV.json`;
   new Model(container, src, loadingManager, [- 15, 20, - 5], [.7, .7, .7], [0, 5, 0]);
 
   return container;
@@ -326,7 +327,7 @@ const createERVModel = () => {
 const createHabitatModel = () => {
   const container = new THREE.Group();
 
-  const src = `../assets/3dmodels/3/hab.json`;
+  const src = `assets/3dmodels/3/hab.json`;
 
   /*
   const src3 = `../assets/3dmodels/3/astronaut2.json`;
@@ -356,19 +357,29 @@ const createCityModel = () => {
   const container = new THREE.Group();
 
   //const src = `../assets/3dmodels/4/habitats2.json`;
-  const src = `../assets/3dmodels/4/habitats3.json`;
+  const src = `assets/3dmodels/4/habitats3.json`;
   //const src2 = `../assets/3dmodels/4/dome_all.json`;
+<<<<<<< HEAD
   //const src3 = `../assets/3dmodels/4/dome_2.json`;
 
   new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
 
   /*
+=======
+  const src2 = `../assets/3dmodels/4/dome.json`;
+  //const src4 = `../assets/3dmodels/4/solarpanel.json`;
+
+  new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
+
+  new SolarPanelGroup(container, loadingManager);
+
+>>>>>>> removed some excessive code and updated ChimneyGroup
   new Model(container, src2, loadingManager, [10, - 1, 25], [1.1, 1.1, 1.1], [.05, 5, 0]);
 
-  new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
-  new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
-  new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
-*/
+  //new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
+  //new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
+  //new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
+
 
   new SolarPanelGroup(container, loadingManager);
 
@@ -376,6 +387,7 @@ const createCityModel = () => {
 
 };
 
+<<<<<<< HEAD
 const createChimneysModel = () => {
   const container = new THREE.Group();
 
@@ -387,10 +399,12 @@ const createChimneysModel = () => {
 
 
 /*
+=======
+>>>>>>> removed some excessive code and updated ChimneyGroup
 const createTerraformingModel = () => {
   const container = new THREE.Group();
 
-  const src2 = `../assets/3dmodels/6/trees_lo_poly.json`;
+  const src2 = `assets/3dmodels/6/trees_lo_poly.json`;
   //const src4 = `../assets/3dmodels/6/pine_tree.json`;
   const src5 = `../assets/3dmodels/6/low_poly2.json`;
 

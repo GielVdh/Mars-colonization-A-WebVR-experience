@@ -1,4 +1,6 @@
 import BufferModel from '../models/BufferModel';
+import {Group} from 'three';
+
 export default class ChimneyGroup {
 
   o = [{
@@ -13,16 +15,20 @@ export default class ChimneyGroup {
 
   scale = [.3, .3, .3];
   rotation = [.2, - .2, 0];
-  src = `../../assets/3dmodels/5/chimney3.json`;
+  src = `assets/3dmodels/5/chimney3.json`;
 
-  constructor(container, loadingManager) {
+  constructor(loadingManager) {
 
     this.loadingManager = loadingManager;
-    this.container = container;
+    this.container = new Group();
+
 
     for (let i = 0;i < this.o.length;i ++) {
       this.obj = new BufferModel(this.container, this.src, this.loadingManager, this.o[i].position, this.scale, this.rotation);
     }
+
+    return this.container;
+
   }
 
 }
