@@ -324,17 +324,6 @@ const createHabitatModel = () => {
   const container = new THREE.Group();
 
   const src = `../assets/3dmodels/3/hab.json`;
-<<<<<<< HEAD
-  //const src3 = `../assets/3dmodels/3/astronaut2.json`;
-  //const src4 = `../assets/3dmodels/3/astronaut3.json`;
-  //const src5 = `../assets/3dmodels/3/astro_light.json`;
-
-  new Model(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
-  //new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
-  //new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
-  //new Model(container, src4, loadingManager, [5, 0, 15], [.7, .7, .7], [0, 3, 0]);
-  //new Model(container, src5, loadingManager, [- 18, 0, - 15], [.3, .3, .3], [0, 0, 0]);
-=======
 
   const src3 = `../assets/3dmodels/3/astronaut2.json`;
   const src4 = `../assets/3dmodels/3/astronaut3.json`;
@@ -346,7 +335,6 @@ const createHabitatModel = () => {
   new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
   new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
   new Model(container, src4, loadingManager, [5, 0, 15], [.7, .7, .7], [0, 3, 0]);
->>>>>>> added SolarPanelGroup to optimize performance
 
 
 
@@ -357,14 +345,9 @@ const createHabitatModel = () => {
 const createCityModel = () => {
   const container = new THREE.Group();
 
-<<<<<<< HEAD
-  const src = `../assets/3dmodels/4/habitats2.json`;
-  const src2 = `../assets/3dmodels/4/dome_all.json`;
-=======
   //const src = `../assets/3dmodels/4/habitats2.json`;
   const src = `../assets/3dmodels/4/habitats.json`;
   //const src2 = `../assets/3dmodels/4/dome_all.json`;
->>>>>>> added SolarPanelGroup to optimize performance
   //const src3 = `../assets/3dmodels/4/dome_2.json`;
   const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
@@ -373,16 +356,6 @@ const createCityModel = () => {
   /*
   new Model(container, src2, loadingManager, [10, - 1, 25], [1.1, 1.1, 1.1], [.05, 5, 0]);
 
-<<<<<<< HEAD
-  //new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
-  //new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
-  //new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
-
-  new Model(container, src4, loadingManager, [30, 0, 20], [.7, .7, .7], [.04, 0, 0]);
-  new Model(container, src4, loadingManager, [36, .8, 15], [.7, .7, .7], [.04, .3, 0]);
-  //new Model(container, src4, loadingManager, [31, .5, 11], [.7, .7, .7], [.08, .3, .1]);
-  //new Model(container, src4, loadingManager, [35, .8, 5], [.7, .7, .7], [.08, .3, .1]);
-=======
   new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
   new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
   new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
@@ -393,7 +366,6 @@ const createCityModel = () => {
   new BufferModel(container, src4, loadingManager, [36, .8, 15], [.7, .7, .7], [.04, .3, 0]);
   new BufferModel(container, src4, loadingManager, [31, .5, 11], [.7, .7, .7], [.08, .3, .1]);
   new BufferModel(container, src4, loadingManager, [35, .8, 5], [.7, .7, .7], [.08, .3, .1]);
->>>>>>> added SolarPanelGroup to optimize performance
 
   return container;
 

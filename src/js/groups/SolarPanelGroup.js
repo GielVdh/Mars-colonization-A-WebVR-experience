@@ -1,4 +1,4 @@
-import Model from '../models/Model';
+import BufferModel from '../models/BufferModel';
 export default class SolarPanelGroup {
 
   o = [{
@@ -19,15 +19,15 @@ export default class SolarPanelGroup {
   }]
 
   scale = [.7, .7, .7];
-  src = `../assets/3dmodels/4/solarpanel.json`;
+  src = `../../assets/3dmodels/4/solarpanel.json`;
 
-  constructor(loadingManager, container) {
+  constructor(container, loadingManager) {
+
     this.loadingManager = loadingManager;
     this.container = container;
-    for (let i = 0;i < this.o.length;i ++) {
-      this.obj = new Model(container, this.src, loadingManager, this.o[i].position, this.scale, this.o[i].rotation);
-      this.container.add(this.obj);
 
+    for (let i = 0;i < this.o.length;i ++) {
+      this.obj = new BufferModel(this.container, this.src, this.loadingManager, this.o[i].position, this.scale, this.o[i].rotation);
     }
   }
 
