@@ -11,6 +11,7 @@ import Terrain from './models/Terrain';
 import Model from './models/Model';
 import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
+import CrossHair from './models/CrossHair';
 //import ParticleEmitter from './models/ParticleEmitter';
 
 import SolarPanelGroup from './groups/SolarPanelGroup.js';
@@ -236,14 +237,8 @@ const handleResize = () => {
 
 const addCrosshair = () => {
 
-  const crosshair = new THREE.Mesh(
-    new THREE.RingBufferGeometry(0.02, 0.04, 32),
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      opacity: 0.5,
-      transparent: true
-    })
-);
+  const crosshair = new CrossHair();
+
   crosshair.position.z = - 1;
   camera.add(crosshair);
 
