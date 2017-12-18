@@ -9,8 +9,9 @@ import 'webvr-polyfill';
 import Text from './models/Text.js';
 import Terrain from './models/Terrain';
 import Model from './models/Model';
+import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
-import ParticleEmitter from './models/ParticleEmitter';
+//import ParticleEmitter from './models/ParticleEmitter';
 //import {MeshText2D, textAlign} from 'three-text2d';
 
 // NOTE: Functions will be moved to a new group model
@@ -25,7 +26,6 @@ const container = document.getElementById(`world`),
   descriptionArray = [],
   modelsArray = [],
   mouse = new THREE.Vector2();
-   //noHeadset = document.getElementById(`no-headset`);
 
 let scene,
   renderer,
@@ -38,9 +38,6 @@ let scene,
   vrDisplay,
   vrButton,
   skybox,
-  //sceneHUD,
-  //hudBitmap,
-  //hudMaterial,
   hudLayoutGeom,
   INTERSECTED,
   cube,
@@ -52,8 +49,8 @@ let scene,
   RESOURCES_LOADED = false,
   stats,
   roverRotation,
-  roverTranslation,
-  particles;
+  roverTranslation;
+  //particles;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -70,96 +67,17 @@ const init = () => {
 
   createLights();
   createHUDLayout();
-  //createHUD();
-  //createShape();
-  createTitle();
   createModels();
-  //createDescription();
+
   nextButton();
   previousButton();
 
-  //createFloor();
   createTerrain();
   animate();
 };
 
-
-/*
-const createFloor = () => {
-  const geometry = new THREE.BoxGeometry(2000, 1, 2000);
-  const material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
-  const mesh = new THREE.Mesh(geometry, material);
-  mesh.position.set(0, - 1, 0);
-  mesh.receiveShadow = true;
-  scene.add(mesh);
-
-};*/
-
-
-
-
 const createTerrain = () => {
   new Terrain(scene, controls.userHeight, loadingManager);
-};
-
-
-
-const createTitle = () => {
-  /*
-const text = new MeshText2D(`RIGHT`, {align: textAlign.right, font: `40px Arial`, fillStyle: `#000000`, antialias: true});
-  text.material.alphaTest = 0.1;
-  text.position.set(0, 5, - 10);
-  text.scale.set(.01, .01, .01);
-  console.log(text);
-  controls.camera.add(text);*/
-
-
-
-
-  /*
-textGroup = new THREE.Object3D();
-  textGroup.position.set(0, 2, - 10);
-  textGroup.rotation.set(- 3, 2, - 10);
-  textGroup.scale.set(.2, .2, .2);
-  const content = `blub`;
-  new Text(textGroup, content, [0, 0, 0], [0, 0, 0]);
-  controls.camera.add(textGroup);*/
-
-
-  //scene.add(textGroup);
-
-  //text.lookAt(camera);
-
-
-  //description.txtMesh.position.x = 300;
-
-  /*
-  const loader = new THREE.FontLoader();
-
-  loader.load(`../assets/fonts/helvetiker_regular.typeface.json`, font => {
-    console.log(font);
-    txtGeom = new THREE.TextGeometry(`Hello`, {
-      font: font,
-      size: 10,
-      height: 1,
-      curveSegments: 12,
-      bevelEnabled: false,
-    });
-    const txtMaterial = new THREE.MeshPhongMaterial({color: 0x000000});
-
-    const txtMesh = new THREE.Mesh(txtGeom, txtMaterial);
-    txtMesh.castShadow = true;
-    txtMesh.receiveShadow = true;
-    txtMesh.position.x = 200;
-    txtMesh.rotation.y = 200;
-    txtMesh.position.y = 0;
-    txtMesh.position.z = - 100;
-
-    scene.add(txtMesh);
-  });  */
-
-
-
 };
 
 const onResize = () => {
@@ -171,18 +89,6 @@ const onResize = () => {
   loadingScreen.camera.aspect = window.innerWidth / window.innerHeight;
   loadingScreen.camera.updateProjectionMatrix();
 };
-
-
-/*
-const createDescription = () => {
-
-  const content = `Een nieuw tekstblokje`;
-
-  const description = new Text(scene, content, [200, 0, - 10], [0, 300, 0]);
-  console.log(description);
-};*/
-
-
 
 const createScene = () => {
 
@@ -230,8 +136,10 @@ const createScene = () => {
   raycaster = new THREE.Raycaster();
 
   // renderer
-  renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+  renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, precision: `mediump`});
   renderer.setPixelRatio(window.devicePixelRatio);
+
+  console.log(renderer.renderList);
   // TO DO EventListener for touch event
   window.addEventListener(`touchstart`, handleCardboardTouch);
   /*
@@ -246,14 +154,7 @@ const createScene = () => {
   // Apply VR stereo rendering to renderer.
   effect = new VREffect(renderer);
   effect.setSize(WIDTH, HEIGHT);
-  //console.log(WIDTH / HEIGHT);
-  //console.log(effect.render(scene, camera));
-  //console.log(effect);
-  //console.log(controls.camera);
-  /*
-enterVR.on(`enter`, () => {
-    enterVR.requestEnterFullscreen().then(() => {});
-  });*/
+
   const uiOptions = {
     color: `black`,
     background: `white`,
@@ -332,7 +233,7 @@ const handleResize = () => {
 const addCrosshair = () => {
 
   const crosshair = new THREE.Mesh(
-    new THREE.RingGeometry(0.02, 0.04, 32),
+    new THREE.RingBufferGeometry(0.02, 0.04, 32),
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
       opacity: 0.5,
@@ -380,52 +281,17 @@ const createModels = () => {
   modelsArray.push(chimneys);
 
   // add rover to te modelsContainer and push it to the models array
-  const terraforming = createTerraformingModel();
+  /*
+const terraforming = createTerraformingModel();
   // terraforming.position.set(5, 4, - 5);
   // terraforming.scale.set(2, 2, 2);
   modelsContainer.add(terraforming);
-  modelsArray.push(terraforming);
+  modelsArray.push(terraforming);*/
 
   //checkIfModelVisible();
   scene.add(modelsContainer);
 
 };
-
-
-/*
-const createShape = () => {
-
-  /*
-const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  const material = new THREE.MeshLambertMaterial({color: 0x68c3c0});
-
-  cube = new THREE.Mesh(geometry, material);
-  cube.position.set(0, controls.userHeight, - 1);
-
-  scene.add(cube);
-
-
-
-
-  const loader = new THREE.JSONLoader();
-  loader.load (`../assets/3dmodels/model.json`, (geometry, mat) => {
-    console.log(mat);
-    const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
-    geometry.castShadow = true;
-    geometry.receiveShadow = true;
-    mesh = new THREE.Mesh(geometry, texture);
-    //console.log(mesh.scale = (.2, .2, .2));
-
-  //mesh.position.x = 0;
-    mesh.rotation.y = 100;
-    //mesh.position.y = 1.5;
-    mesh.position.set(- 3, .5, - 15);
-    mesh.rotation.x = - .25;
-
-
-    scene.add(mesh);
-  });
-};*/
 
 // NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
 
@@ -446,7 +312,7 @@ const createRoverModel = () => {
 const createERVModel = () => {
   const container = new THREE.Group();
   container.name = `ERV`;
-  particles = new ParticleEmitter(container, loadingManager);
+  //particles = new ParticleEmitter(container, loadingManager);
   const src = `../assets/3dmodels/2/MarsDirect_ERV.json`;
   new Model(container, src, loadingManager, [- 15, 20, - 5], [.7, .7, .7], [0, 5, 0]);
 
@@ -458,6 +324,7 @@ const createHabitatModel = () => {
   const container = new THREE.Group();
 
   const src = `../assets/3dmodels/3/hab.json`;
+<<<<<<< HEAD
   //const src3 = `../assets/3dmodels/3/astronaut2.json`;
   //const src4 = `../assets/3dmodels/3/astronaut3.json`;
   //const src5 = `../assets/3dmodels/3/astro_light.json`;
@@ -467,6 +334,21 @@ const createHabitatModel = () => {
   //new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
   //new Model(container, src4, loadingManager, [5, 0, 15], [.7, .7, .7], [0, 3, 0]);
   //new Model(container, src5, loadingManager, [- 18, 0, - 15], [.3, .3, .3], [0, 0, 0]);
+=======
+
+  const src3 = `../assets/3dmodels/3/astronaut2.json`;
+  const src4 = `../assets/3dmodels/3/astronaut3.json`;
+
+
+
+  new BufferModel(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
+
+  new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
+  new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
+  new Model(container, src4, loadingManager, [5, 0, 15], [.7, .7, .7], [0, 3, 0]);
+>>>>>>> added SolarPanelGroup to optimize performance
+
+
 
   return container;
 
@@ -475,15 +357,23 @@ const createHabitatModel = () => {
 const createCityModel = () => {
   const container = new THREE.Group();
 
+<<<<<<< HEAD
   const src = `../assets/3dmodels/4/habitats2.json`;
   const src2 = `../assets/3dmodels/4/dome_all.json`;
+=======
+  //const src = `../assets/3dmodels/4/habitats2.json`;
+  const src = `../assets/3dmodels/4/habitats.json`;
+  //const src2 = `../assets/3dmodels/4/dome_all.json`;
+>>>>>>> added SolarPanelGroup to optimize performance
   //const src3 = `../assets/3dmodels/4/dome_2.json`;
   const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
-  new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
+  new BufferModel(container, src, loadingManager, [- 10, .7, - 30], [.5, .5, .5], [0, - .5, 0]);
 
-  new Model(container, src2, loadingManager, [5, - 7.5, 32], [1.1, 1.1, 1.1], [.05, 5, 0]);
+  /*
+  new Model(container, src2, loadingManager, [10, - 1, 25], [1.1, 1.1, 1.1], [.05, 5, 0]);
 
+<<<<<<< HEAD
   //new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
   //new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
   //new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
@@ -492,6 +382,18 @@ const createCityModel = () => {
   new Model(container, src4, loadingManager, [36, .8, 15], [.7, .7, .7], [.04, .3, 0]);
   //new Model(container, src4, loadingManager, [31, .5, 11], [.7, .7, .7], [.08, .3, .1]);
   //new Model(container, src4, loadingManager, [35, .8, 5], [.7, .7, .7], [.08, .3, .1]);
+=======
+  new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
+  new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
+  new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
+*/
+
+
+  new BufferModel(container, src4, loadingManager, [30, 0, 20], [.7, .7, .7], [.04, 0, 0]);
+  new BufferModel(container, src4, loadingManager, [36, .8, 15], [.7, .7, .7], [.04, .3, 0]);
+  new BufferModel(container, src4, loadingManager, [31, .5, 11], [.7, .7, .7], [.08, .3, .1]);
+  new BufferModel(container, src4, loadingManager, [35, .8, 5], [.7, .7, .7], [.08, .3, .1]);
+>>>>>>> added SolarPanelGroup to optimize performance
 
   return container;
 
@@ -502,14 +404,16 @@ const createChimneysModel = () => {
 
   const src2 = `../assets/3dmodels/5/chimney3.json`;
 
-  new Model(container, src2, loadingManager, [10, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
-  new Model(container, src2, loadingManager, [5, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
-  new Model(container, src2, loadingManager, [15, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+  new BufferModel(container, src2, loadingManager, [10, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+  new BufferModel(container, src2, loadingManager, [5, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
+  new BufferModel(container, src2, loadingManager, [15, 4, - 16], [.3, .3, .3], [.2, - .2, 0]);
 
   return container;
 
 };
 
+
+/*
 const createTerraformingModel = () => {
   const container = new THREE.Group();
 
@@ -544,14 +448,18 @@ const createTerraformingModel = () => {
   return container;
 
 };
+*/
+
+
+
 
 
 const nextButton = () => {
-  const nextButton = new THREE.Object3D();
+  const nextButton = new THREE.Group();
   nextButton.position.set(1.05, 1, - 1);
   nextButton.rotation.set(- .2, - .3, 0);
 
-  const geometry = new THREE.BoxGeometry(.3, .1, .05);
+  const geometry = new THREE.BoxBufferGeometry(.3, .1, .05);
   const material = new THREE.MeshLambertMaterial({color: 0x030a71});
 
   cube = new THREE.Mesh(geometry, material);
@@ -568,11 +476,11 @@ const nextButton = () => {
 };
 
 const previousButton = () => {
-  const previousButton = new THREE.Object3D();
+  const previousButton = new THREE.Group();
   previousButton.position.set(- 1.05, 1, - 1);
   previousButton.rotation.set(- .2, .3, 0);
 
-  const geometry = new THREE.BoxGeometry(.3, .1, .05);
+  const geometry = new THREE.BoxBufferGeometry(.3, .1, .05);
   const material = new THREE.MeshLambertMaterial({color: 0x030a71});
 
   cube = new THREE.Mesh(geometry, material);
@@ -604,9 +512,9 @@ const scrollDescriptions = () => {
 
 const createHUDLayout = () => {
   const textureLoader = new THREE.TextureLoader(loadingManager);
-  descriptions = new THREE.Object3D();
+  descriptions = new THREE.Group();
   for (let i = 0;i < 6;i ++) {
-    hudLayoutGeom = new THREE.PlaneGeometry(1, 1);
+    hudLayoutGeom = new THREE.PlaneBufferGeometry(1, 1);
     const hudMat = new THREE.MeshBasicMaterial({map: textureLoader.load(`assets/img/text_faces/text_face_${i}.png`, tx => {
 
       tx.antistropy = 0;
@@ -729,66 +637,6 @@ e.children.forEach(ec => {
 
 };
 
-// This function will probably be removed
-
-/*const createHUD = () => {
-
-  const hudCanvas = document.createElement(`canvas`);
-  hudCanvas.width = WIDTH;
-  hudCanvas.height = HEIGHT;
-  hudCanvas.imageSmoothingEnabled = true;
-  hudBitmap = hudCanvas.getContext(`2d`);
-
-  hudBitmap.font = `Normal 30px Arial`;
-  hudBitmap.textAlign = `center`;
-  //hudBitmap.fillRect(0, 0, 600, 600);
-  hudBitmap.fillStyle = `rgba(245,245,245,0.75)`;
-  hudBitmap.fillText(`Initializing...`, WIDTH / 2, 50);
-
-  //scene.add(cameraHUDOrt);
-  //sceneHUD = new THREE.Scene();
-  const hudTexture = new THREE.Texture(hudCanvas);
-  //console.log(hudTexture.image.width);
-  hudTexture.needsUpdate = true;
-  //console.log(hudTexture);
-  hudMaterial = new THREE.MeshBasicMaterial({map: hudTexture});
-  hudMaterial.transparent = true;
-  hudMaterial.alphaTest = .1;
-  const planeGeometry = new THREE.PlaneGeometry(1, 1);
-  const plane = new THREE.Mesh(planeGeometry, hudMaterial);
-  plane.position.set(0, 0, - 2);
-  plane.scale.set(2, 2, 2);
-  controls.camera.add(plane);
-  //scene.add(plane);
-
-
-
-/*
-// create a object3D to keep all the hud meshes together
-  const hudMesh = new THREE.Object3D();
-  console.log(hudMesh.layers.test);
-  console.log(hudMesh);
-  hudMesh.position.set(0, 0, - 1);
-
-
-  const circleGeom = new THREE.CircleGeometry(.3, 50);
-  const circleMat = new THREE.MeshBasicMaterial({color: 0xffff00});
-  const circle = new THREE.Mesh(circleGeom, circleMat);
-
-  circle.position.set(1, 1, - 1);
-  circle.rotation.z = .5;
-  circle.rotation.x = .1;
-  hudMesh.add(circle);
-  //scene.add(circle);
-  controls.camera.add(hudMesh);
-  //scene.add(hudMesh);
-  //console.log(controls.camera);
-
-
-};*/
-
-
-
 const createLights = () => {
     // hemisphereLight is a gradient colored light
   const hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, .9);
@@ -906,14 +754,16 @@ const checkRay = () => {
 
 const animate = time => {
   stats.begin();
+  renderer.clear();
   // when resources are not fully loaded = Loadingscreen and vr ui hidden
   if (RESOURCES_LOADED === false) {
     stats.begin();
-    window.requestAnimationFrame(animate);
+
     renderer.render(loadingScreen.scene, loadingScreen.camera);
     uiContainer.classList.add(`hidden`);
+    console.log(renderer.info);
+    window.requestAnimationFrame(animate);
 
-    stats.end();
 
     return;
   }
@@ -959,7 +809,8 @@ const animate = time => {
   loadingText.classList.add(`hidden`);
   loaderAnim.classList.add(`hidden`);
   TWEEN.update(time);
-  particles.update();
+  //console.log(renderer.info);
+  //particles.update();
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
   //renderer.render(sceneHUD, cameraHUDOrt);

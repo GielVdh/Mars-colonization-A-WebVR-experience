@@ -18,7 +18,6 @@ export default class Model {
 
   constructor(container, src, loadingManager, position, scale, rotation) {
     this.container = container;
-    console.log(this.container.visible);
     this.src = src;
     position === undefined ? this.position = [0, 0, 0] : this.position = position;
     scale === undefined ? this.scale = [0, 0, 0] : this.scale = scale;
@@ -30,7 +29,6 @@ export default class Model {
   init() {
     this.loader = new THREE.JSONLoader(this.loadingManager);
     this.loader.load(this.src, (geometry, materials) => {
-
       //const texture = new THREE.MeshLambertMaterial({color: 0x68c3c0});
 
       this.mesh = new THREE.Mesh(geometry, materials);
@@ -43,7 +41,6 @@ this.mesh.rotation.y = 100;
       this.mesh.position.set(- 3, .5, - 15);
       this.mesh.rotation.x = - .25;*/
 
-      console.log(this.mesh.userData);
       this.mesh.position.set(...this.position);
       this.mesh.scale.set(...this.scale);
       this.mesh.rotation.set(...this.rotation);
