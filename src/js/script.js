@@ -281,7 +281,6 @@ const startAnim = e => {
     });
     ervAnim.start();
     ervAnim.onComplete(() => {
-      console.log(e);
       e.remove(e.children[0]);
     });
   }
@@ -419,11 +418,10 @@ const checkRay = () => {
 };
 
 const animate = time => {
-  //stats.begin();
+
   renderer.clear();
   // when resources are not fully loaded = Loadingscreen and vr ui hidden
   if (RESOURCES_LOADED === false) {
-    //stats.begin();
 
     renderer.render(loadingScreen.scene, loadingScreen.camera);
     uiContainer.classList.add(`hidden`);
@@ -445,12 +443,10 @@ const animate = time => {
   loadingText.classList.add(`hidden`);
   loaderAnim.classList.add(`hidden`);
   TWEEN.update(time);
-  //console.log(renderer.info);
+
   particles.update();
   particlesSmoke.update();
-  //smoke.update();
 
-  //stats.end();
   window.requestAnimationFrame(animate);
 
 };
