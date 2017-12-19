@@ -11,11 +11,11 @@ import Terrain from './models/Terrain';
 import Model from './models/Model';
 import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
-import CrossHair from './models/CrossHair';
 //import ParticleEmitter from './models/ParticleEmitter';
 
 import SolarPanelGroup from './groups/SolarPanelGroup.js';
 import ChimneyGroup from './groups/ChimneyGroup.js';
+import TreesGroup from './groups/TreesGroup.js';
 //import AstronautsGroup from './groups/AstronautsGroup.js';
 
 // NOTE: Functions will be moved to a new group model
@@ -237,8 +237,14 @@ const handleResize = () => {
 
 const addCrosshair = () => {
 
-  const crosshair = new CrossHair();
-
+  const crosshair = new THREE.Mesh(
+    new THREE.RingBufferGeometry(0.02, 0.04, 32),
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      opacity: 0.5,
+      transparent: true
+    })
+);
   crosshair.position.z = - 1;
   camera.add(crosshair);
 
@@ -280,12 +286,12 @@ const createModels = () => {
   modelsArray.push(chimneys);
 
   // add rover to te modelsContainer and push it to the models array
-  /*
-const terraforming = createTerraformingModel();
+
+  const terraforming = createTerraformingModel();
   // terraforming.position.set(5, 4, - 5);
   // terraforming.scale.set(2, 2, 2);
   modelsContainer.add(terraforming);
-  modelsArray.push(terraforming);*/
+  modelsArray.push(terraforming);
 
   //checkIfModelVisible();
   scene.add(modelsContainer);
@@ -354,13 +360,6 @@ const createCityModel = () => {
   //const src = `../assets/3dmodels/4/habitats2.json`;
   const src = `assets/3dmodels/4/habitats3.json`;
   //const src2 = `../assets/3dmodels/4/dome_all.json`;
-<<<<<<< HEAD
-  //const src3 = `../assets/3dmodels/4/dome_2.json`;
-
-  new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
-
-  /*
-=======
   const src2 = `../assets/3dmodels/4/dome.json`;
   //const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
@@ -368,44 +367,22 @@ const createCityModel = () => {
 
   new SolarPanelGroup(container, loadingManager);
 
->>>>>>> removed some excessive code and updated ChimneyGroup
   new Model(container, src2, loadingManager, [10, - 1, 25], [1.1, 1.1, 1.1], [.05, 5, 0]);
 
-  //new Model(container, src3, loadingManager, [19, - 1, 32], [.6, .6, .6], [0, 2.5, 0]);
-  //new Model(container, src3, loadingManager, [15.2, - .1, 15.5], [.59, .59, .59], [0, 4.2, 0]);
-  //new Model(container, src3, loadingManager, [5, - .5, 19.8], [.59, .59, .59], [.05, 9.5, 0]);
-
-
-  new SolarPanelGroup(container, loadingManager);
-
   return container;
 
 };
 
-<<<<<<< HEAD
-const createChimneysModel = () => {
-  const container = new THREE.Group();
-
-  new ChimneyGroup(container, loadingManager);
-
-  return container;
-
-};
-
-
-/*
-=======
->>>>>>> removed some excessive code and updated ChimneyGroup
 const createTerraformingModel = () => {
   const container = new THREE.Group();
 
   const src2 = `assets/3dmodels/6/trees_lo_poly.json`;
   //const src4 = `../assets/3dmodels/6/pine_tree.json`;
-  const src5 = `../assets/3dmodels/6/low_poly2.json`;
-
   new Model(container, src2, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
 
-  //low poly pine group 2
+  new TreesGroup(container, loadingManager);
+  /*
+//low poly pine group 2
   new Model(container, src5, loadingManager, [13, 3, 0], [.5, .5, .5], [0, 0, 0]);
   new Model(container, src5, loadingManager, [12, 3, - 1], [.7, .7, .7], [0, 0, 0]);
   new Model(container, src5, loadingManager, [15, 3, 3], [.7, .7, .7], [0, 0, 0]);
@@ -426,11 +403,13 @@ const createTerraformingModel = () => {
   new Model(container, src5, loadingManager, [- 55, 0, - 18], [1.5, 1.5, 1.5], [0, 0, 0]);
   new Model(container, src5, loadingManager, [- 52, 0, - 22], [1.1, 1.1, 1.1], [0, 0, 0]);
   new Model(container, src5, loadingManager, [- 43, 0, - 25], [.9, .9, .9], [0, 0, 0]);
+*/
+
 
   return container;
 
 };
-*/
+
 
 
 
