@@ -6,7 +6,6 @@ import Stats from './vendors/stats.min';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
 
-//import Text from './models/Text.js';
 import Terrain from './models/Terrain';
 import Lights from './models/Lights';
 import LoadingScreen from './models/LoadingScreen';
@@ -19,12 +18,7 @@ import Buttons from './models/Buttons/';
 //import ParticleEmitter from './models/ParticleEmitter';
 >>>>>>> added some more Groups: City, Rover, Erv, Habitat
 
-import CityGroup from './groups/CityGroup/';
-import TerraFormingGroup from './groups/TerraFormingGroup/';
-import ChimneyGroup from './groups/ChimneyGroup.js';
-import RoverGroup from './groups/RoverGroup.js';
-import ErvGroup from './groups/ErvGroup.js';
-import HabitatGroup from './groups/HabitatGroup.js';
+import ModelsGroup from './groups/ModelsGroup';
 
 // NOTE: Functions will be moved to a new group model
 //import fadeAnim from './animations/fadeAnim';
@@ -62,8 +56,12 @@ let scene,
   stats,
   roverRotation,
   roverTranslation,
+<<<<<<< HEAD
   particles,
   smoke;
+=======
+  particles;
+>>>>>>> added the particle emmiter to the scene
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -98,7 +96,6 @@ const createScene = () => {
   document.body.appendChild(stats.dom);
 
   loadingScreen = new LoadingScreen();
-  //console.log(loadingText);
 
   // Loadingmanager to track progress of all the loaders --> extra propertie for the loaders
   loadingManager = new THREE.LoadingManager();
@@ -114,10 +111,6 @@ const createScene = () => {
     RESOURCES_LOADED = !RESOURCES_LOADED;
   };
 
-  /*
-  window.addEventListener(`resize`, handleResize, true);
-  window.addEventListener(`vrdisplaypresentchange`, handleResize, true);  */
-
   //scene
   scene = new THREE.Scene();
   console.log(scene);
@@ -128,7 +121,6 @@ const createScene = () => {
   controls.standing = true;
   camera.position.y = controls.userHeight;
   scene.add(camera);
-  //camera.position.x = - 0.03200000151991844;
 
   // raycaster to check which objects are intersected
   raycaster = new THREE.Raycaster();
@@ -143,13 +135,7 @@ const createScene = () => {
 
   window.addEventListener(`resize`, onResize, true);
   window.addEventListener(`vrdisplaypresentchange`, onResize, true);
-  /*
-  window.addEventListener(`mousedown`, handleCardboardTouch);
-  window.addEventListener(`mousemove`, handleMouseMove);  */
 
-
-
-  //renderer.autoClear = false;
   container.appendChild(renderer.domElement);
 
   // Apply VR stereo rendering to renderer.
@@ -219,13 +205,6 @@ const handleMouseMove = e => {
   mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
 };
 
-/*
-const handleResize = () => {
-  effect.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeigth;
-  camera.updateProjectionMatrix();
-};*/
-
 const addCrosshair = () => {
 
   const crosshair = new CrossHair();
@@ -238,41 +217,9 @@ const addCrosshair = () => {
 
 const createModels = () => {
 
-  const modelsContainer = new THREE.Group();
-  modelsContainer.rotation.y = 100;
-  modelsContainer.position.set(- 3, - 1, - 10);
-
-  // add rover to te modelsContainer and push it to the models array
-  const rover = new RoverGroup(loadingManager);
-  modelsContainer.add(rover);
-  modelsArray.push(rover);
-
-  // add ERV to te modelsContainer and push it to the models array
-  const erv = new ErvGroup(loadingManager);
-  modelsContainer.add(erv);
-  modelsArray.push(erv);
-
-  // add habitat to te modelsContainer and push it to the models array
-  const habitat = new HabitatGroup(loadingManager);
-  modelsContainer.add(habitat);
-  modelsArray.push(habitat);
-
-  // add buildings to te modelsContainer and push it to the models array
-  const city = new CityGroup(loadingManager);
-  modelsContainer.add(city);
-  modelsArray.push(city);
-
-  // add chimneys to te modelsContainer and push it to the models array
-  const chimneys = new ChimneyGroup(loadingManager);
-  modelsContainer.add(chimneys);
-  modelsArray.push(chimneys);
-
-  // add terraforming to te modelsContainer and push it to the models array
-  const terraforming = new TerraFormingGroup(loadingManager);
-  modelsContainer.add(terraforming);
-  modelsArray.push(terraforming);
-
-  scene.add(modelsContainer);
+  const models = new ModelsGroup(scene, loadingManager, modelsArray);
+  particles = models.ervParticles();
+  console.log(models.ervParticles());
 };
 
 // NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
@@ -638,6 +585,7 @@ const animate = time => {
   TWEEN.update(time);
   //console.log(renderer.info);
 <<<<<<< HEAD
+<<<<<<< HEAD
   particles.update();
   smoke.update();
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
@@ -649,6 +597,9 @@ const animate = time => {
   //console.log(vrDisplay);
 =======
   //particles.update();
+=======
+  particles.update();
+>>>>>>> added the particle emmiter to the scene
 
 >>>>>>> added a modelsgroup and buttons group
   stats.end();
