@@ -270,7 +270,6 @@ const checkIfModelVisible = () => {
 const startAnim = e => {
 
   if (e.name === `ERV`) {
-    console.log(e);
     const target = new THREE.Vector3(0, - 20, 0);
     const ervAnim = tweenAnim(e.position, target, {
       duration: 5000,
