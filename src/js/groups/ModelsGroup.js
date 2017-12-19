@@ -48,7 +48,6 @@ export default class ModelGroup {
     // add ERV to te modelsContainer and push it to the models array
     this.e = new ErvGroup(lm);
     this.pErv = new ParticleEmitter(this.e, lm, this.eP[0].pSrc, this.eP[0].pPos, this.eP[0].pRot, this.eP[0].rangeH, this.eP[0].rangeV);
-    console.log(this.pErv);
     this.mc.add(this.e);
     this.array.push(this.e);
 

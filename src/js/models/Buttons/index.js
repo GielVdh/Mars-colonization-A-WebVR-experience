@@ -28,7 +28,6 @@ export default class Buttons {
     this.lm = lm;
 
     for (let i = 0;i < this.o.length;i ++) {
-      console.log(this.o[i].bPos);
       this.b = new Button(this.scene, this.array, this.o[i].cPos, this.o[i].cName, this.o[i].bPos, this.o[i].bRot, this.o[i].content, this.o[i].tPos, this.lm);
     }
   }

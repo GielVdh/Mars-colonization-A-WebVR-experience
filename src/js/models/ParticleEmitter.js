@@ -28,13 +28,12 @@ export default class ParticleEmitter {
         THREE.Math.randFloatSpread(rangeH)
       );
       this.p.velocity = new THREE.Vector3(0, - Math.random() * .01 * 100, 0);
-      console.log(this.pGeo);
+
       this.pGeo.vertices.push(this.p);
-      //this.pGeo.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
     }
 
     this.particles = new THREE.Points(this.pGeo, this.pMat);
-    //this.particles.position.set(- 14, 19, - 5);
+
     this.particles.position.set(...pPos);
     this.particles.rotation.set(...pRot);
     this.particles.sortParticles = true;
@@ -49,7 +48,7 @@ export default class ParticleEmitter {
     while (this.pCount--) {
 
       this.pS = this.particles.geometry.vertices[this.pCount];
-      //console.log(this.p.y);
+
       if (this.pS.y < - 2 / 2) {
         this.pS.y = 2 / 2;
       }

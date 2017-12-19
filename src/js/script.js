@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import * as TWEEN from 'tween.js';
 import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
-//import Stats from './vendors/stats.min';
+
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
 
@@ -15,7 +15,6 @@ import CrossHair from './models/CrossHair';
 import ModelsGroup from './groups/ModelsGroup';
 
 // NOTE: Functions will be moved to a new group model
-//import fadeAnim from './animations/fadeAnim';
 import tweenAnim from './animations/tweenAnim';
 
 const container = document.getElementById(`world`),
@@ -93,15 +92,12 @@ const createScene = () => {
 
   //scene
   scene = new THREE.Scene();
-  console.log(scene);
-
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, .1, 1000);
 
   controls = new VRControls(camera);
   controls.standing = true;
   camera.position.y = controls.userHeight;
   scene.add(camera);
-  //camera.position.x = - 0.03200000151991844;
 
   // raycaster to check which objects are intersected
   raycaster = new THREE.Raycaster();
@@ -196,6 +192,7 @@ const addCrosshair = () => {
 
 };
 
+
 const createModels = () => {
   const models = new ModelsGroup(scene, loadingManager, modelsArray);
   particles = models.ervParticles();
@@ -273,6 +270,7 @@ const checkIfModelVisible = () => {
 const startAnim = e => {
 
   if (e.name === `ERV`) {
+    console.log(e);
     const target = new THREE.Vector3(0, - 20, 0);
     const ervAnim = tweenAnim(e.position, target, {
       duration: 5000,
@@ -282,6 +280,10 @@ const startAnim = e => {
       }
     });
     ervAnim.start();
+    ervAnim.onComplete(() => {
+      console.log(e);
+      e.remove(e.children[0]);
+    });
   }
 
   if (e.name === `rover`) {

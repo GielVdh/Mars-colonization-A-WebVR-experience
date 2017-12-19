@@ -1,5 +1,5 @@
 import {BoxBufferGeometry, MeshLambertMaterial, Mesh, Group} from 'three';
-import Text from '../Text';
+import Text from './Text';
 
 export default class Button {
   constructor(scene, array, cPos, cName, bPos, bRot, content, tPos, lm) {
@@ -18,7 +18,7 @@ export default class Button {
     this.c.position.set(...cPos);
     this.c.name = cName;
     this.b.add(this.c);
-    console.log(this.c);
+
     new Text(this.b, content, tPos, lm);
 
     this.scene.add(this.b);

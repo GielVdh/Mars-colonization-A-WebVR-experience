@@ -4,16 +4,12 @@
 <head>
 
   <meta charset="UTF-8">
-  <title>MARSCOLONIZATION: A WebVR experiment</title>
+  <title>Mars Colonization: A WebVR experiment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <script>
     // https://github.com/typekit/webfontloader/blob/master/README.md
     WebFontConfig = {
-      // google: {
-      //   families: ['Roboto']
-      // }
-
       custom: {
         families: ['digital', 'bignoodle'],
         urls: ['assets/fonts/css_fonts/digital.css', 'assets/fonts/css_fonts/bignoodle.css']
@@ -29,9 +25,11 @@
       s.parentNode.insertBefore(wf, s);
     })(document);
   </script>
-
-
+  <link rel="icon"
+        type="image/x-icon"
+        href="favicon.ico">
 </head>
+
 
 <body>
 
@@ -47,10 +45,6 @@
   <div id="world">
 
   </div>
-
-  <span>
-    use the cardboards action button to confirm your selection
-  </span>
 
   <div id="ui" class="ui">
     <div id="vr-button"></div>
