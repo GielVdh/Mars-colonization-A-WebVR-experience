@@ -11,7 +11,8 @@ import Terrain from './models/Terrain';
 import Model from './models/Model';
 import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
-//import ParticleEmitter from './models/ParticleEmitter';
+import ParticleEmitter from './models/ParticleEmitter';
+import SmokeEmitter from './models/SmokeEmitter';
 
 import SolarPanelGroup from './groups/SolarPanelGroup.js';
 import ChimneyGroup from './groups/ChimneyGroup.js';
@@ -53,8 +54,9 @@ let scene,
   RESOURCES_LOADED = false,
   stats,
   roverRotation,
-  roverTranslation;
-  //particles;
+  roverTranslation,
+  particles,
+  smoke;
   //hudCanvas,
   //textGroup;
   //cameraHUDOrt;
@@ -306,9 +308,7 @@ const createRoverModel = () => {
   container.name = `rover`;
 
   const src = `assets/3dmodels/1/rover.json`;
-  //new Model(container, src, loadingManager);
   new Model(container, src, loadingManager, [0, 0, 0], [.5, .5, .5], [- .2, 0, 0]);
-  //new Model(container, src, loadingManager, [20, .55, 10], [.5, .5, .5], [0, 0, 0]);
 
   return container;
 
@@ -317,7 +317,7 @@ const createRoverModel = () => {
 const createERVModel = () => {
   const container = new THREE.Group();
   container.name = `ERV`;
-  //particles = new ParticleEmitter(container, loadingManager);
+  particles = new ParticleEmitter(container, loadingManager);
   const src = `assets/3dmodels/2/MarsDirect_ERV.json`;
   new Model(container, src, loadingManager, [- 15, 20, - 5], [.7, .7, .7], [0, 5, 0]);
 
@@ -330,25 +330,7 @@ const createHabitatModel = () => {
 
   const src = `assets/3dmodels/3/hab.json`;
 
-  /*
-  const src3 = `../assets/3dmodels/3/astronaut2.json`;
-  const src4 = `../assets/3dmodels/3/astronaut3.json`;  */
-
-
-
-
-
   new BufferModel(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
-
-  //new AstronautsGroup(container, loadingManager);
-  /*
-new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0]);
-  new Model(container, src4, loadingManager, [- 5, 0, - 1], [.7, .7, .7], [0, 3, 0]);
-  new Model(container, src4, loadingManager, [5, 0, 15], [.7, .7, .7], [0, 3, 0]);
-*/
-
-
-
 
   return container;
 
@@ -356,12 +338,10 @@ new Model(container, src3, loadingManager, [- 5, 1, - 2], [.3, .3, .3], [0, 0, 0
 
 const createCityModel = () => {
   const container = new THREE.Group();
+  smoke = new SmokeEmitter(container, loadingManager);
 
-  //const src = `../assets/3dmodels/4/habitats2.json`;
   const src = `assets/3dmodels/4/habitats3.json`;
-  //const src2 = `../assets/3dmodels/4/dome_all.json`;
   const src2 = `../assets/3dmodels/4/dome.json`;
-  //const src4 = `../assets/3dmodels/4/solarpanel.json`;
 
   new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
 
@@ -376,44 +356,14 @@ const createCityModel = () => {
 const createTerraformingModel = () => {
   const container = new THREE.Group();
 
-  const src2 = `assets/3dmodels/6/trees_lo_poly.json`;
-  //const src4 = `../assets/3dmodels/6/pine_tree.json`;
-  new Model(container, src2, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
+  const src = `assets/3dmodels/6/trees_lo_poly.json`;
+  new Model(container, src, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
 
   new TreesGroup(container, loadingManager);
-  /*
-//low poly pine group 2
-  new Model(container, src5, loadingManager, [13, 3, 0], [.5, .5, .5], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [12, 3, - 1], [.7, .7, .7], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [15, 3, 3], [.7, .7, .7], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [17, 3, 5], [1, 1, 1], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [17, 3, - 2], [.9, .9, .9], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [20, 3, - 3], [.6, .6, .6], [0, 0, 0]);
-  //low poly pine group 3
-  new Model(container, src5, loadingManager, [- 30, 1, - 28], [1.9, 1.9, 1.9], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 35, 1, - 25], [1.5, 1.5, 1.5], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 40, 1, - 37], [.7, .7, .7], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 25, 1, - 28], [1.5, 1.5, 1.5], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 20, 1, - 27], [1.1, 1.1, 1.1], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 28, 1, - 32], [.9, .9, .9], [0, 0, 0]);
-
-  new Model(container, src5, loadingManager, [- 45, 0, - 28], [1.9, 1.9, 1.9], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 42, 0, - 20], [1.5, 1.5, 1.5], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 50, 0, - 15], [.7, .7, .7], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 55, 0, - 18], [1.5, 1.5, 1.5], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 52, 0, - 22], [1.1, 1.1, 1.1], [0, 0, 0]);
-  new Model(container, src5, loadingManager, [- 43, 0, - 25], [.9, .9, .9], [0, 0, 0]);
-*/
-
 
   return container;
 
 };
-
-
-
-
-
 
 const nextButton = () => {
   const nextButton = new THREE.Group();
@@ -772,7 +722,8 @@ const animate = time => {
   loaderAnim.classList.add(`hidden`);
   TWEEN.update(time);
   //console.log(renderer.info);
-  //particles.update();
+  particles.update();
+  smoke.update();
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
   //console.log(textGroup.rotation.y);
   //renderer.render(sceneHUD, cameraHUDOrt);

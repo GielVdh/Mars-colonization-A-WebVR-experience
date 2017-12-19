@@ -8,7 +8,7 @@ export default class ParticleEmitter {
   constructor(container, loadingManager) {
     this.container = container;
     this.textureLoader = new THREE.TextureLoader(loadingManager);
-    this.pGeo = new THREE.BufferGeometry();
+    this.pGeo = new THREE.Geometry();
     this.nParticles = 100;
     this.pMat = new THREE.PointsMaterial({
       color: 0xFFFFFF,
