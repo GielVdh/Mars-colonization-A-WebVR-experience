@@ -6,26 +6,25 @@ import Stats from './vendors/stats.min';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
 
-import Text from './models/Text.js';
+//import Text from './models/Text.js';
 import Terrain from './models/Terrain';
-import Model from './models/Model';
-//import BufferModel from './models/BufferModel';
+import Lights from './models/Lights';
 import LoadingScreen from './models/LoadingScreen';
 <<<<<<< HEAD
 import ParticleEmitter from './models/ParticleEmitter';
 import SmokeEmitter from './models/SmokeEmitter';
 =======
 import CrossHair from './models/CrossHair';
+import Buttons from './models/Buttons/';
 //import ParticleEmitter from './models/ParticleEmitter';
 >>>>>>> added some more Groups: City, Rover, Erv, Habitat
 
 import CityGroup from './groups/CityGroup/';
+import TerraFormingGroup from './groups/TerraFormingGroup/';
 import ChimneyGroup from './groups/ChimneyGroup.js';
-import TreesGroup from './groups/TreesGroup.js';
 import RoverGroup from './groups/RoverGroup.js';
 import ErvGroup from './groups/ErvGroup.js';
 import HabitatGroup from './groups/HabitatGroup.js';
-//import AstronautsGroup from './groups/AstronautsGroup.js';
 
 // NOTE: Functions will be moved to a new group model
 //import fadeAnim from './animations/fadeAnim';
@@ -53,7 +52,7 @@ let scene,
   skybox,
   hudLayoutGeom,
   INTERSECTED,
-  cube,
+  //cube,
   raycaster,
   count = 0,
   descriptions,
@@ -69,11 +68,7 @@ let scene,
   //textGroup;
   //cameraHUDOrt;
 
-
-
 const init = () => {
-  window.addEventListener(`resize`, onResize, true);
-  window.addEventListener(`vrdisplaypresentchange`, onResize, true);
 
   createScene();
   getVRDisplays();
@@ -83,8 +78,7 @@ const init = () => {
   createHUDLayout();
   createModels();
 
-  nextButton();
-  previousButton();
+  createButtons();
 
   createTerrain();
   animate();
@@ -92,16 +86,6 @@ const init = () => {
 
 const createTerrain = () => {
   new Terrain(scene, controls.userHeight, loadingManager);
-};
-
-const onResize = () => {
-  effect.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-
-  // make loadingScreen adapt when sizeof the screen is changed
-  loadingScreen.camera.aspect = window.innerWidth / window.innerHeight;
-  loadingScreen.camera.updateProjectionMatrix();
 };
 
 const createScene = () => {
@@ -156,6 +140,9 @@ const createScene = () => {
   console.log(renderer.renderList);
   // TO DO EventListener for touch event
   window.addEventListener(`touchstart`, handleCardboardTouch);
+
+  window.addEventListener(`resize`, onResize, true);
+  window.addEventListener(`vrdisplaypresentchange`, onResize, true);
   /*
   window.addEventListener(`mousedown`, handleCardboardTouch);
   window.addEventListener(`mousemove`, handleMouseMove);  */
@@ -206,22 +193,16 @@ const createScene = () => {
       }
     });
   });
+};
 
-  /*
-  noHeadset.addEventListener(`click`, e => {
-    e.preventDefault();
-    // hotfix for enterFullscreen
-    enterVR.requestEnterFullscreen().catch(e => {
-      console.log(e);
-      if (e.message === `e.manager.enterFullscreen(...).then is not a function`) {
-        console.log(`webvr-ui fullscreen hotfix`);
-      } else {
-        return e;
-      }
-    });
-  });  */
+const onResize = () => {
+  effect.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
 
-
+  // make loadingScreen adapt when sizeof the screen is changed
+  loadingScreen.camera.aspect = window.innerWidth / window.innerHeight;
+  loadingScreen.camera.updateProjectionMatrix();
 };
 
 const handleCardboardTouch = () => {
@@ -256,9 +237,9 @@ const addCrosshair = () => {
 
 
 const createModels = () => {
+
   const modelsContainer = new THREE.Group();
   modelsContainer.rotation.y = 100;
-  //container.position.y = 1.5;
   modelsContainer.position.set(- 3, - 1, - 10);
 
   // add rover to te modelsContainer and push it to the models array
@@ -266,12 +247,12 @@ const createModels = () => {
   modelsContainer.add(rover);
   modelsArray.push(rover);
 
-  // add buildings to te modelsContainer and push it to the models array
+  // add ERV to te modelsContainer and push it to the models array
   const erv = new ErvGroup(loadingManager);
   modelsContainer.add(erv);
   modelsArray.push(erv);
 
-  // add buildings to te modelsContainer and push it to the models array
+  // add habitat to te modelsContainer and push it to the models array
   const habitat = new HabitatGroup(loadingManager);
   modelsContainer.add(habitat);
   modelsArray.push(habitat);
@@ -281,26 +262,22 @@ const createModels = () => {
   modelsContainer.add(city);
   modelsArray.push(city);
 
-  // add buildings to te modelsContainer and push it to the models array
+  // add chimneys to te modelsContainer and push it to the models array
   const chimneys = new ChimneyGroup(loadingManager);
   modelsContainer.add(chimneys);
   modelsArray.push(chimneys);
 
-  // add rover to te modelsContainer and push it to the models array
-
-  const terraforming = createTerraformingModel();
-  // terraforming.position.set(5, 4, - 5);
-  // terraforming.scale.set(2, 2, 2);
+  // add terraforming to te modelsContainer and push it to the models array
+  const terraforming = new TerraFormingGroup(loadingManager);
   modelsContainer.add(terraforming);
   modelsArray.push(terraforming);
 
-  //checkIfModelVisible();
   scene.add(modelsContainer);
-
 };
 
 // NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 const createRoverModel = () => {
   const container = new THREE.Group();
@@ -412,6 +389,10 @@ const previousButton = () => {
 
   scene.add(previousButton);
   buttonArray.push(cube);
+=======
+const createButtons = () => {
+  new Buttons(scene, buttonArray, loadingManager);
+>>>>>>> added a modelsgroup and buttons group
 };
 
 const scrollDescriptions = () => {
@@ -534,33 +515,10 @@ const startAnim = e => {
 };
 
 const createLights = () => {
-    // hemisphereLight is a gradient colored light
-  const hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, .9);
 
-    // directional light shines from a specific direction
-  const shadowLight = new THREE.DirectionalLight(0xffffff, .9);
+  new Lights(scene);
+  console.log(scene);
 
-    //set direction of the light
-  shadowLight.position.set(150, 350, 350);
-
-    // allow shadow casting
-  shadowLight.castShadow = true;
-
-    // define visible area of the projected shadow
-
-  shadowLight.shadow.camera.right = 400;
-  shadowLight.shadow.camera.top = 400;
-  shadowLight.shadow.camera.bottom = - 400;
-  shadowLight.shadow.camera.near = 1;
-  shadowLight.shadow.camera.far = 10000;
-
-    // define resolution of the shadow // less performante
-  shadowLight.shadow.mapSize.width = 2048;
-  shadowLight.shadow.mapSize.height = 2048;
-
-    // activate lights
-  scene.add(hemisphereLight);
-  scene.add(shadowLight);
 };
 
 const createSkyBox = () => {
@@ -662,48 +620,24 @@ const animate = time => {
     return;
   }
 
-
-  //cube.rotation.x += 0.005;
-  //cube.rotation.y += 0.01;
   if (vrButton.isPresenting()) {
     controls.update();
     //hudControls.update();
     //renderer.render(scene, camera);
 
     effect.render(scene, camera);
-    /*
-  renderer.clear();
-    hudBitmap.clearRect(0, 0, WIDTH, HEIGHT);
-    hudBitmap.font = `Normal 40px Arial`;
-    hudBitmap.textAlign = `center`;
-    hudBitmap.fillStyle = `rgba(245,245,245,0.75)`;
-    hudBitmap.fillText(`Initializing...`, WIDTH / 2, HEIGHT / 2);
-    renderer.setViewport(0, 0, WIDTH / 2, HEIGHT);*/
-    //effect.render(sceneHUD, cameraHUDOrt);
-
-
-
-    /*
-  renderer.setViewport(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
-    renderer.render(sceneHUD, cameraHUDOrt);
-    renderer.fillStyle = 0;  */
-
-
-    //console.log(renderer);
-    //console.log(sceneHUD);
-    //console.log(effect.cameraR.position.x);
 
   } else {
     renderer.render(scene, camera);
-    //renderer.render(sceneHUD, cameraHUDOrt);
   }
-  //console.log(camera.rotation);
+
   checkRay();
   uiContainer.classList.remove(`hidden`);
   loadingText.classList.add(`hidden`);
   loaderAnim.classList.add(`hidden`);
   TWEEN.update(time);
   //console.log(renderer.info);
+<<<<<<< HEAD
   particles.update();
   smoke.update();
   //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
@@ -713,10 +647,12 @@ const animate = time => {
   //console.log(renderer.vr.getDevice());
   //effect.render(scene, camera);
   //console.log(vrDisplay);
+=======
+  //particles.update();
+
+>>>>>>> added a modelsgroup and buttons group
   stats.end();
   window.requestAnimationFrame(animate);
-
-  //console.log(vrDisplay);
 };
 
 init();

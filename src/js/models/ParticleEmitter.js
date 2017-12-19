@@ -4,6 +4,7 @@ export default class ParticleEmitter {
 
   particles
   nParticles
+  p
 
   constructor(container, loadingManager) {
     this.container = container;
@@ -27,6 +28,7 @@ export default class ParticleEmitter {
         THREE.Math.randFloatSpread(.8)
       );
       this.p.velocity = new THREE.Vector3(0, - Math.random() * .01 * 100, 0);
+      console.log(this.pGeo);
       this.pGeo.vertices.push(this.p);
       //this.pGeo.colors.push(new THREE.Color(Math.random(), Math.random(), Math.random()));
     }

@@ -2,7 +2,7 @@ import Model from '../../models/Model';
 import TreesGroup from './TreesGroup';
 import {Group} from 'three';
 
-export default class CityGroup {
+export default class TerraFormingGroup {
 
   o = [{
     position: [15, 2, - 10],
