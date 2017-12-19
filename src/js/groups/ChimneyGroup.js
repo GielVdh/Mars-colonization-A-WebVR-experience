@@ -22,7 +22,6 @@ export default class ChimneyGroup {
     this.loadingManager = loadingManager;
     this.container = new Group();
 
-
     for (let i = 0;i < this.o.length;i ++) {
       this.obj = new BufferModel(this.container, this.src, this.loadingManager, this.o[i].position, this.scale, this.rotation);
     }
