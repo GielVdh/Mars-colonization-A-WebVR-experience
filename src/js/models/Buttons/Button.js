@@ -1,5 +1,5 @@
 import {BoxBufferGeometry, MeshLambertMaterial, Mesh, Group} from 'three';
-import Text from './Text';
+import Text from '../Text';
 
 export default class Button {
   constructor(scene, array, cPos, cName, bPos, bRot, content, tPos, lm) {

@@ -6,26 +6,26 @@ export default class ParticleEmitter {
   nParticles
   p
 
-  constructor(container, loadingManager) {
+  constructor(container, loadingManager, pSrc, pPos, pRot, rangeH, rangeV) {
     this.container = container;
     this.textureLoader = new THREE.TextureLoader(loadingManager);
     this.pGeo = new THREE.Geometry();
     this.nParticles = 100;
+
+    this.src = this.textureLoader.load(pSrc);
     this.pMat = new THREE.PointsMaterial({
-      color: 0xFFFFFF,
-      size: 3,
-      map: this.textureLoader.load(
-   `assets/img/icon_test.png`
- ),
+      color: pSrc === `assets/img/icon_test.png` ? 0xFFFFFF : 0x111111,
+      size: pSrc === `assets/img/icon_test.png` ? 3 : 10,
+      map: this.src,
       blending: THREE.AdditiveBlending,
       transparent: true
     });
 
     for (let i = 0;i < this.nParticles;i ++) {
       this.p = new THREE.Vector3(
-        THREE.Math.randFloatSpread(.8),
-        THREE.Math.randFloatSpread(2),
-        THREE.Math.randFloatSpread(.8)
+        THREE.Math.randFloatSpread(rangeH),
+        THREE.Math.randFloatSpread(rangeV),
+        THREE.Math.randFloatSpread(rangeH)
       );
       this.p.velocity = new THREE.Vector3(0, - Math.random() * .01 * 100, 0);
       console.log(this.pGeo);
@@ -34,7 +34,9 @@ export default class ParticleEmitter {
     }
 
     this.particles = new THREE.Points(this.pGeo, this.pMat);
-    this.particles.position.set(- 14, 19, - 5);
+    //this.particles.position.set(- 14, 19, - 5);
+    this.particles.position.set(...pPos);
+    this.particles.rotation.set(...pRot);
     this.particles.sortParticles = true;
 
     this.container.add(this.particles);

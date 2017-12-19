@@ -2,21 +2,15 @@ import * as THREE from 'three';
 import * as TWEEN from 'tween.js';
 import VRControls from 'three-vrcontrols-module';
 import VREffect from 'three-vreffect-module';
-import Stats from './vendors/stats.min';
+//import Stats from './vendors/stats.min';
 import * as webvrui from 'webvr-ui';
 import 'webvr-polyfill';
 
 import Terrain from './models/Terrain';
 import Lights from './models/Lights';
-import LoadingScreen from './models/LoadingScreen';
-<<<<<<< HEAD
-import ParticleEmitter from './models/ParticleEmitter';
-import SmokeEmitter from './models/SmokeEmitter';
-=======
-import CrossHair from './models/CrossHair';
 import Buttons from './models/Buttons/';
-//import ParticleEmitter from './models/ParticleEmitter';
->>>>>>> added some more Groups: City, Rover, Erv, Habitat
+import LoadingScreen from './models/LoadingScreen';
+import CrossHair from './models/CrossHair';
 
 import ModelsGroup from './groups/ModelsGroup';
 
@@ -46,28 +40,18 @@ let scene,
   skybox,
   hudLayoutGeom,
   INTERSECTED,
-  //cube,
   raycaster,
   count = 0,
   descriptions,
   loadingScreen,
   loadingManager,
   RESOURCES_LOADED = false,
-  stats,
   roverRotation,
   roverTranslation,
-<<<<<<< HEAD
   particles,
-  smoke;
-=======
-  particles;
->>>>>>> added the particle emmiter to the scene
-  //hudCanvas,
-  //textGroup;
-  //cameraHUDOrt;
+  particlesSmoke;
 
 const init = () => {
-
   createScene();
   getVRDisplays();
   createSkyBox();
@@ -90,10 +74,6 @@ const createScene = () => {
 
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight;
-
-  stats = new Stats();
-  stats.showPanel(0);
-  document.body.appendChild(stats.dom);
 
   loadingScreen = new LoadingScreen();
 
@@ -121,6 +101,7 @@ const createScene = () => {
   controls.standing = true;
   camera.position.y = controls.userHeight;
   scene.add(camera);
+  //camera.position.x = - 0.03200000151991844;
 
   // raycaster to check which objects are intersected
   raycaster = new THREE.Raycaster();
@@ -129,13 +110,13 @@ const createScene = () => {
   renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, precision: `mediump`});
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  console.log(renderer.renderList);
   // TO DO EventListener for touch event
   window.addEventListener(`touchstart`, handleCardboardTouch);
 
   window.addEventListener(`resize`, onResize, true);
   window.addEventListener(`vrdisplaypresentchange`, onResize, true);
 
+  //renderer.autoClear = false;
   container.appendChild(renderer.domElement);
 
   // Apply VR stereo rendering to renderer.
@@ -179,6 +160,7 @@ const createScene = () => {
       }
     });
   });
+
 };
 
 const onResize = () => {
@@ -214,132 +196,16 @@ const addCrosshair = () => {
 
 };
 
-
 const createModels = () => {
-
   const models = new ModelsGroup(scene, loadingManager, modelsArray);
   particles = models.ervParticles();
-  console.log(models.ervParticles());
+  particlesSmoke = models.chParticles();
 };
 
 // NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-const createRoverModel = () => {
-  const container = new THREE.Group();
-
-  container.name = `rover`;
-
-  const src = `assets/3dmodels/1/rover.json`;
-  new Model(container, src, loadingManager, [0, 0, 0], [.5, .5, .5], [- .2, 0, 0]);
-
-  return container;
-
-};
-
-const createERVModel = () => {
-  const container = new THREE.Group();
-  container.name = `ERV`;
-  particles = new ParticleEmitter(container, loadingManager);
-  const src = `assets/3dmodels/2/MarsDirect_ERV.json`;
-  new Model(container, src, loadingManager, [- 15, 20, - 5], [.7, .7, .7], [0, 5, 0]);
-
-  return container;
-
-};
-
-const createHabitatModel = () => {
-  const container = new THREE.Group();
-
-  const src = `assets/3dmodels/3/hab.json`;
-
-  new BufferModel(container, src, loadingManager, [- 20, - .5, - 1], [.7, .7, .7], [.04, 0, 0]);
-
-  return container;
-
-};
-
-const createCityModel = () => {
-  const container = new THREE.Group();
-  smoke = new SmokeEmitter(container, loadingManager);
-
-  const src = `assets/3dmodels/4/habitats3.json`;
-  const src2 = `../assets/3dmodels/4/dome.json`;
-
-  new Model(container, src, loadingManager, [- 20, .7, - 25], [1.2, 1.2, 1.2], [0, - .2, 0]);
-
-  new SolarPanelGroup(container, loadingManager);
-
-  new Model(container, src2, loadingManager, [10, - 1, 25], [1.1, 1.1, 1.1], [.05, 5, 0]);
-
-  return container;
-
-};
-
-const createTerraformingModel = () => {
-  const container = new THREE.Group();
-
-  const src = `assets/3dmodels/6/trees_lo_poly.json`;
-  new Model(container, src, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
-=======
-const createTerraformingModel = () => {
-  const container = new THREE.Group();
-  const src2 = `assets/3dmodels/6/trees_lo_poly.json`;
-
-  new Model(container, src2, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
->>>>>>> added some more Groups: City, Rover, Erv, Habitat
-
-  new TreesGroup(container, loadingManager);
-
-  return container;
-};
-
-const nextButton = () => {
-  const nextButton = new THREE.Group();
-  nextButton.position.set(1.05, 1, - 1);
-  nextButton.rotation.set(- .2, - .3, 0);
-
-  const geometry = new THREE.BoxBufferGeometry(.3, .1, .05);
-  const material = new THREE.MeshLambertMaterial({color: 0x030a71});
-
-  cube = new THREE.Mesh(geometry, material);
-  cube.position.x = - .06;
-  cube.name = `next`;
-  nextButton.add(cube);
-
-  const content = `NEXT`;
-
-  new Text(nextButton, content, [- .09, 0, .075], loadingManager);
-
-  scene.add(nextButton);
-  buttonArray.push(cube);
-};
-
-const previousButton = () => {
-  const previousButton = new THREE.Group();
-  previousButton.position.set(- 1.05, 1, - 1);
-  previousButton.rotation.set(- .2, .3, 0);
-
-  const geometry = new THREE.BoxBufferGeometry(.3, .1, .05);
-  const material = new THREE.MeshLambertMaterial({color: 0x030a71});
-
-  cube = new THREE.Mesh(geometry, material);
-  cube.position.x = .06;
-  cube.name = `previous`;
-  previousButton.add(cube);
-
-  const content = `PREVIOUS`;
-
-
-  new Text(previousButton, content, [.075, 0, .075], loadingManager);
-
-  scene.add(previousButton);
-  buttonArray.push(cube);
-=======
 const createButtons = () => {
   new Buttons(scene, buttonArray, loadingManager);
->>>>>>> added a modelsgroup and buttons group
 };
 
 const scrollDescriptions = () => {
@@ -462,10 +328,7 @@ const startAnim = e => {
 };
 
 const createLights = () => {
-
   new Lights(scene);
-  console.log(scene);
-
 };
 
 const createSkyBox = () => {
@@ -554,11 +417,11 @@ const checkRay = () => {
 };
 
 const animate = time => {
-  stats.begin();
+  //stats.begin();
   renderer.clear();
   // when resources are not fully loaded = Loadingscreen and vr ui hidden
   if (RESOURCES_LOADED === false) {
-    stats.begin();
+    //stats.begin();
 
     renderer.render(loadingScreen.scene, loadingScreen.camera);
     uiContainer.classList.add(`hidden`);
@@ -569,9 +432,6 @@ const animate = time => {
 
   if (vrButton.isPresenting()) {
     controls.update();
-    //hudControls.update();
-    //renderer.render(scene, camera);
-
     effect.render(scene, camera);
 
   } else {
@@ -584,26 +444,13 @@ const animate = time => {
   loaderAnim.classList.add(`hidden`);
   TWEEN.update(time);
   //console.log(renderer.info);
-<<<<<<< HEAD
-<<<<<<< HEAD
   particles.update();
-  smoke.update();
-  //textGroup.rotation.y = Math.atan2((camera.rotation.x - textGroup.position.x), (camera.position.z - textGroup.position.z));
-  //console.log(textGroup.rotation.y);
-  //renderer.render(sceneHUD, cameraHUDOrt);
-  //controls.update();
-  //console.log(renderer.vr.getDevice());
-  //effect.render(scene, camera);
-  //console.log(vrDisplay);
-=======
-  //particles.update();
-=======
-  particles.update();
->>>>>>> added the particle emmiter to the scene
+  particlesSmoke.update();
+  //smoke.update();
 
->>>>>>> added a modelsgroup and buttons group
-  stats.end();
+  //stats.end();
   window.requestAnimationFrame(animate);
+
 };
 
 init();

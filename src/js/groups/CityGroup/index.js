@@ -14,7 +14,7 @@ export default class CityGroup {
     position: [10, - 1, 25],
     scale: [1.1, 1.1, 1.1],
     rotation: [.05, 5, 0],
-    src: `../assets/3dmodels/4/dome.json`
+    src: `assets/3dmodels/4/dome.json`
   }]
 
   constructor(loadingManager) {
