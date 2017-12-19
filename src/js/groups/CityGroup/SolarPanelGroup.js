@@ -1,4 +1,4 @@
-import BufferModel from '../models/BufferModel';
+import BufferModel from '../../models/BufferModel';
 export default class SolarPanelGroup {
 
   o = [{

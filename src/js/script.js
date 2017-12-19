@@ -9,14 +9,22 @@ import 'webvr-polyfill';
 import Text from './models/Text.js';
 import Terrain from './models/Terrain';
 import Model from './models/Model';
-import BufferModel from './models/BufferModel';
+//import BufferModel from './models/BufferModel';
 import LoadingScreen from './models/LoadingScreen';
+<<<<<<< HEAD
 import ParticleEmitter from './models/ParticleEmitter';
 import SmokeEmitter from './models/SmokeEmitter';
+=======
+import CrossHair from './models/CrossHair';
+//import ParticleEmitter from './models/ParticleEmitter';
+>>>>>>> added some more Groups: City, Rover, Erv, Habitat
 
-import SolarPanelGroup from './groups/SolarPanelGroup.js';
+import CityGroup from './groups/CityGroup/';
 import ChimneyGroup from './groups/ChimneyGroup.js';
 import TreesGroup from './groups/TreesGroup.js';
+import RoverGroup from './groups/RoverGroup.js';
+import ErvGroup from './groups/ErvGroup.js';
+import HabitatGroup from './groups/HabitatGroup.js';
 //import AstronautsGroup from './groups/AstronautsGroup.js';
 
 // NOTE: Functions will be moved to a new group model
@@ -239,14 +247,8 @@ const handleResize = () => {
 
 const addCrosshair = () => {
 
-  const crosshair = new THREE.Mesh(
-    new THREE.RingBufferGeometry(0.02, 0.04, 32),
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      opacity: 0.5,
-      transparent: true
-    })
-);
+  const crosshair = new CrossHair();
+
   crosshair.position.z = - 1;
   camera.add(crosshair);
 
@@ -260,30 +262,27 @@ const createModels = () => {
   modelsContainer.position.set(- 3, - 1, - 10);
 
   // add rover to te modelsContainer and push it to the models array
-  const rover = createRoverModel();
-  //rover.position.set(- 10, - .5, - 10);
-  //rover.rotation.set(- .3, 6, 0);
-  //rover.scale.set(1, 1, 1);
+  const rover = new RoverGroup(loadingManager);
   modelsContainer.add(rover);
   modelsArray.push(rover);
 
   // add buildings to te modelsContainer and push it to the models array
-  const erv = createERVModel();
+  const erv = new ErvGroup(loadingManager);
   modelsContainer.add(erv);
   modelsArray.push(erv);
 
   // add buildings to te modelsContainer and push it to the models array
-  const habitat = createHabitatModel();
+  const habitat = new HabitatGroup(loadingManager);
   modelsContainer.add(habitat);
   modelsArray.push(habitat);
 
   // add buildings to te modelsContainer and push it to the models array
-  const city = createCityModel();
+  const city = new CityGroup(loadingManager);
   modelsContainer.add(city);
   modelsArray.push(city);
 
   // add buildings to te modelsContainer and push it to the models array
-  const chimneys =   new ChimneyGroup(loadingManager);
+  const chimneys = new ChimneyGroup(loadingManager);
   modelsContainer.add(chimneys);
   modelsArray.push(chimneys);
 
@@ -302,6 +301,7 @@ const createModels = () => {
 
 // NOTE: Position property is an array with x, y, z coordinates = new Model(container, src, loadingManager, [0, 0, 0])
 
+<<<<<<< HEAD
 const createRoverModel = () => {
   const container = new THREE.Group();
 
@@ -358,11 +358,17 @@ const createTerraformingModel = () => {
 
   const src = `assets/3dmodels/6/trees_lo_poly.json`;
   new Model(container, src, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
+=======
+const createTerraformingModel = () => {
+  const container = new THREE.Group();
+  const src2 = `assets/3dmodels/6/trees_lo_poly.json`;
+
+  new Model(container, src2, loadingManager, [15, 2, - 10], [3, 3, 3], [0, 3.5, 0]);
+>>>>>>> added some more Groups: City, Rover, Erv, Habitat
 
   new TreesGroup(container, loadingManager);
 
   return container;
-
 };
 
 const nextButton = () => {
@@ -524,30 +530,6 @@ const startAnim = e => {
     });
     roverRotation2.chain(roverRotation3);
   }
-
-
-
-
-  /*
-e.children.forEach(ec => {
-    console.log(ec);
-
-    if (INTERSECTED.name !== `previous`) {
-
-      const anim = fadeAnim(ec, `out`, {
-        duration: 1000,
-
-        easing: TWEEN.Easing.Quintic.InOut,
-
-        callback: () => {
-          console.log(`Fade complete`);
-        }
-
-      });
-      anim.start();
-    }
-  });*/
-
 
 };
 
