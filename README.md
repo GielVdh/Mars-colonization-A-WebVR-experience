@@ -1,6 +1,6 @@
 # Mars colonization: A WebVR experience
 
-##Intro
+## Intro
 
 This experience depicts the different steps in the future colonization of Mars. You can go and change the current step by looking at the next or previous button and using the action button on your mobile VR headset. You can download this project localy or see a live version [here](https://gielvdh.github.io/Mars-colonization-A-WebVR-experience/)
 
