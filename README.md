@@ -1,1 +1,1 @@
-# The clonization of Mars (VR)
+# The colonization of Mars (VR)
