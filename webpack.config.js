@@ -13,8 +13,8 @@ const {ifProduction, ifDevelopment} = getIfUtils(process.env.NODE_ENV);
 
 const extractCSS = new ExtractTextWebpackPlugin(`css/style.css`);
 
-// change for production build on different server path http://student.howest.be/giel.vanden.herrew1/20172018/EXW/WebVR/
-const publicPath = `https://gielvdh.github.io/Mars-colonization-A-WebVR-experience/`;
+// change for production build on different server path https://gielvdh.github.io/Mars-colonization-A-WebVR-experience/
+const publicPath = `/`;
 
 const port = 3000;
 
