@@ -21,6 +21,7 @@ const container = document.getElementById(`world`),
   uiContainer = document.getElementById(`ui`),
   loadingText = document.querySelector(`.loading`),
   loaderAnim = document.querySelector(`.loader`),
+  title = document.querySelector(`.header-title`),
   buttonArray = [],
   descriptionArray = [],
   modelsArray = [],
@@ -51,6 +52,7 @@ let scene,
   particlesSmoke;
 
 const init = () => {
+
   createScene();
   getVRDisplays();
   createSkyBox();
@@ -58,7 +60,6 @@ const init = () => {
   createLights();
   createHUDLayout();
   createModels();
-
   createButtons();
 
   createTerrain();
@@ -128,6 +129,7 @@ const createScene = () => {
   vrButton.on(`enter`, () => {
     TWEEN.removeAll();
     roverRotation.start();
+    title.classList.add(`hidden`);
   });
   vrButton.on(`exit`, () => {
     camera.quaternion.set(0, 0, 0, 1);
@@ -147,7 +149,7 @@ const createScene = () => {
       window.addEventListener(`mousedown`, handleCardboardTouch);
       window.addEventListener(`mousemove`, handleMouseMove);
     }
-    vrButton.requestEnterFullscreen().catch(e => {
+    vrButton.requestEnterFullscreen(container).catch(e => {
       console.log(e);
       if (e.message === `e.manager.enterFullscreen(...).then is not a function`) {
         console.log(`webvr-ui fullscreen hotfix`);
@@ -156,7 +158,6 @@ const createScene = () => {
       }
     });
   });
-
 };
 
 const onResize = () => {
@@ -275,7 +276,7 @@ const startAnim = e => {
       duration: 5000,
       easing: TWEEN.Easing.Exponential.Out,
       callback: () => {
-        console.log(`Completed`);
+        console.info(`--- COMPLETED ---`);
       }
     });
     ervAnim.start();
@@ -291,7 +292,7 @@ const startAnim = e => {
       duration: 5000,
       easing: TWEEN.Easing.Linear.none,
       callback: () => {
-        console.log(`Completed`);
+        console.info(`--- COMPLETED ---`);
       }
     });
 
@@ -300,7 +301,7 @@ const startAnim = e => {
       duration: 6000,
       easing: TWEEN.Easing.Linear.None,
       callback: () => {
-        console.log(`Completed`);
+        console.info(`--- COMPLETED ---`);
       }
     });
     roverRotation.chain(roverTranslation);
@@ -309,7 +310,7 @@ const startAnim = e => {
       duration: 6000,
       easing: TWEEN.Easing.Linear.None,
       callback: () => {
-        console.log(`Completed`);
+        console.log(`--- COMPLETED ---`);
       }
     });
     roverTranslation.chain(roverRotation2);
@@ -351,9 +352,7 @@ const createSkyBox = () => {
 const getVRDisplays = () => {
   vrButton.getVRDisplay()
     .then(display => {
-      //console.log(display.requestAnimationFrame);
       vrDisplay = display;
-      //display.requestAnimationFrame(animate);
       display.bufferScale_ = 1;
       addCrosshair();
 
@@ -361,7 +360,6 @@ const getVRDisplays = () => {
     .catch(() => {
       // If there is no display available, fallback to window
       vrDisplay = window;
-      //window.requestAnimationFrame(animate);
     });
 
 };
