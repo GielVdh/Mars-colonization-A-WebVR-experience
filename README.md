@@ -1,1 +1,1 @@
-# The colonization of Mars (VR)
+# Mars colonization: A WebVR experience
